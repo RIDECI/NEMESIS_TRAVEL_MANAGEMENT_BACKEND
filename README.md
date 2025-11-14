@@ -1,4 +1,5 @@
-# 🚀 NEMESIS_TRAVEL_MANAGEMENT_BACKEND 
+# 🚀 NEMESIS_TRAVEL_MANAGEMENT_BACKEND
+
 ## 👥 Desarrolladores
 
 * 🧑‍💻 Santiago Carmona Pineda
@@ -54,14 +55,14 @@ Se implementa una estrategia de versionamiento basada en **GitFlow**, garantizan
 ### ✨ Feature Branches
 
 ```
-feature/[nombre-funcionalidad]
+feature/[nombre-funcionalidad]-hades_[codigo-jira]
 ```
 
 **Ejemplos:**
 
 ```
-- feature/authentication-module
-- feature/security-service
+- feature/authentication-module-hades_23
+- feature/security-service-hades_41
 ```
 
 **Reglas:**
@@ -108,28 +109,28 @@ hotfix/[descripcion-breve-del-fix]
 ### 🧱 Formato Estándar
 
 ```
-[tipo]: [descripción breve de la acción]
+[codigo-jira] [tipo]: [descripción breve de la acción]
 ```
 
 **Ejemplos:**
 
 ```
-feat: agregar validación de token JWT
-fix: corregir error en autenticación por roles
+45-feat: agregar validación de token JWT
+46-fix: corregir error en autenticación por roles
 ```
 
 ---
 
 ### 📂 Tipos de Commit
 
-| **Tipo**   | **Descripción**                      | **Ejemplo**                             |
-| ----------- | ------------------------------------ | --------------------------------------- |
-| `feat`      | ✨ Nueva funcionalidad               | `feat: implementar autenticación con JWT` |
-| `fix`       | 🛠️ Corrección de errores             | `fix: solucionar error en endpoint de login` |
-| `docs`      | 📚 Cambios en documentación          | `docs: actualizar README con nuevas rutas` |
-| `refactor`  | 🔧 Refactor sin cambio funcional     | `refactor: optimizar servicio de seguridad` |
-| `test`      | 🧪 Pruebas unitarias o integración   | `test: agregar tests para AuthService`  |
-| `chore`     | 🧹 Mantenimiento o configuración     | `chore: actualizar dependencias de Maven` |
+| **Tipo**   | **Descripción**                      | **Ejemplo**                                     |
+| ----------- | ------------------------------------ | ----------------------------------------------- |
+| `feat`      | ✨ Nueva funcionalidad               | `22-feat: implementar autenticación con JWT`    |
+| `fix`       | 🛠️ Corrección de errores             | `24-fix: solucionar error en endpoint de login` |
+| `docs`      | 📚 Cambios en documentación          | `25-docs: actualizar README con nuevas rutas`   |
+| `refactor`  | 🔧 Refactor sin cambio funcional     | `27-refactor: optimizar servicio de seguridad`  |
+| `test`      | 🧪 Pruebas unitarias o integración   | `29-test: agregar tests para AuthService`       |
+| `chore`     | 🧹 Mantenimiento o configuración     | `30-chore: actualizar dependencias de Maven`    |
 
 **Reglas:**
 
@@ -143,7 +144,7 @@ fix: corregir error en autenticación por roles
 
 ## 🏗️ Arquitectura del Proyecto
 
-El backend de **NEMESIS_TRAVEL_MANAGEMENT** sigue una **arquitectura limpia y desacoplada**, priorizando:
+El backend de **HADES_COMUNICATION_SECURITY** sigue una **arquitectura limpia y desacoplada**, priorizando:
 
 * 🧩 Separación de responsabilidades
 * 🛠️ Mantenibilidad
