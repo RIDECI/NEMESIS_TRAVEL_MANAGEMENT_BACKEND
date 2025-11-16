@@ -15,9 +15,9 @@ import lombok.Data;
 public class TravelDocument {
 
     @Id
-    private String id;
+    private Long id;
 
-    private String driverId;
+    private Long driverId;
 
     private int availableSlots;
 

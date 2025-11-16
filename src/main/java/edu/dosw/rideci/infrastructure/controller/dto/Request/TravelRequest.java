@@ -9,9 +9,9 @@ import lombok.Data;
 @Builder
 public class TravelRequest {
 
-    private String id;
+    private Long id;
 
-    private String driverId;
+    private Long driverId;
 
     private int availableSlots;
 

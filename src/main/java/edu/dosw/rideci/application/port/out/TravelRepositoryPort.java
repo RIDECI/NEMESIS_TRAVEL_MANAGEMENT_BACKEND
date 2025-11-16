@@ -6,4 +6,10 @@ public interface TravelRepositoryPort {
 
     Travel save(Travel travel);
 
+    Travel getTravelById(Long id);
+
+    void deleteTravelById(Long id);
+
+    Travel updateTravel(Long id, Travel travel);
+
 }

@@ -2,9 +2,11 @@ package edu.dosw.rideci.infrastructure.persistance.Repository.mapper;
 
 import org.mapstruct.Mapper;
 
+import edu.dosw.rideci.domain.model.Destiny;
+import edu.dosw.rideci.domain.model.Origin;
 import edu.dosw.rideci.domain.model.Travel;
-import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
-import edu.dosw.rideci.infrastructure.controller.dto.Response.TravelResponse;
+import edu.dosw.rideci.infrastructure.persistance.Entity.DestinyDocument;
+import edu.dosw.rideci.infrastructure.persistance.Entity.OriginDocument;
 import edu.dosw.rideci.infrastructure.persistance.Entity.TravelDocument;
 
 @Mapper(componentModel = "spring")
@@ -14,8 +16,8 @@ public interface TravelMapper {
 
     Travel toDomain(TravelDocument travel);
 
-    TravelResponse toResponse(Travel travel);
+    OriginDocument toOriginEmbeddable(Origin origin);
 
-    Travel toDomain(TravelRequest travelRequest);
+    DestinyDocument toDestinyEmbeddable(Destiny destiny);
 
 }

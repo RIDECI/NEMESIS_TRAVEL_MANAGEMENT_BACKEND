@@ -16,9 +16,9 @@ import lombok.Setter;
 @Builder
 public class Travel {
 
-    private String id;
+    private Long id;
 
-    private String driverId;
+    private Long driverId;
 
     private int availableSlots;
 
