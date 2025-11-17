@@ -1,9 +1,12 @@
 package edu.dosw.rideci.infrastructure.persistance.Repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import edu.dosw.rideci.application.port.out.TravelRepositoryPort;
 import edu.dosw.rideci.domain.model.Travel;
+import edu.dosw.rideci.domain.model.Enum.Status;
 import edu.dosw.rideci.exceptions.TravelNotFoundException;
 import edu.dosw.rideci.infrastructure.persistance.Entity.TravelDocument;
 import edu.dosw.rideci.infrastructure.persistance.Repository.mapper.TravelMapper;
@@ -57,6 +60,29 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         actualTravel.setDestiny(travelMapper.toDestinyEmbeddable(travel.getDestiny()));
 
         TravelDocument travelUpdated = travelRepository.save(actualTravel);
+
+        return travelMapper.toDomain(travelUpdated);
+
+    }
+
+    @Override
+    public List<Travel> getAllTravels() {
+
+        List<TravelDocument> allTravels = travelRepository.findAll();
+
+        return travelMapper.toListDomain(allTravels);
+
+    }
+
+    @Override
+    public Travel changeStateTravel(Long id, Status status) {
+
+        TravelDocument travelToModifyState = travelRepository.findById(id).orElseThrow(
+                () -> new TravelNotFoundException("The trip to change the state with id: {id} does not exist "));
+
+        travelToModifyState.setStatus(status);
+
+        TravelDocument travelUpdated = travelRepository.save(travelToModifyState);
 
         return travelMapper.toDomain(travelUpdated);
 

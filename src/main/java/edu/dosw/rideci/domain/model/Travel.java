@@ -3,6 +3,7 @@ package edu.dosw.rideci.domain.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import edu.dosw.rideci.domain.model.Enum.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,8 @@ public class Travel {
     private Long driverId;
 
     private int availableSlots;
+
+    private Status status;
 
     private double estimatedCost;
 

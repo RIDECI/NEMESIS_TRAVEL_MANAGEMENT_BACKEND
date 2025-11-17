@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import edu.dosw.rideci.domain.model.Enum.Status;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,6 +21,8 @@ public class TravelDocument {
     private Long driverId;
 
     private int availableSlots;
+
+    private Status status;
 
     private double estimatedCost;
 

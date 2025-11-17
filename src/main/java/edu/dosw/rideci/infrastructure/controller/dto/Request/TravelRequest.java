@@ -2,6 +2,8 @@ package edu.dosw.rideci.infrastructure.controller.dto.Request;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import edu.dosw.rideci.domain.model.Enum.Status;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,6 +16,8 @@ public class TravelRequest {
     private Long driverId;
 
     private int availableSlots;
+
+    private Status status;
 
     private double estimatedCost;
 

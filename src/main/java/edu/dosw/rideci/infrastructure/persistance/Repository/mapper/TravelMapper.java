@@ -1,5 +1,7 @@
 package edu.dosw.rideci.infrastructure.persistance.Repository.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
 import edu.dosw.rideci.domain.model.Destiny;
@@ -19,5 +21,9 @@ public interface TravelMapper {
     OriginDocument toOriginEmbeddable(Origin origin);
 
     DestinyDocument toDestinyEmbeddable(Destiny destiny);
+
+    List<Travel> toListDomain(List<TravelDocument> travel);
+
+    List<TravelDocument> toListDocument(List<Travel> travel);
 
 }

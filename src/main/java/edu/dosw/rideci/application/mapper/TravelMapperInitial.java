@@ -1,5 +1,7 @@
 package edu.dosw.rideci.application.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
 import edu.dosw.rideci.domain.model.Destiny;
@@ -20,4 +22,9 @@ public interface TravelMapperInitial {
     OriginResponse toOriginResponse(Origin origin);
 
     DestinyResponse toDestinyResponse(Destiny destiny);
+
+    List<TravelResponse> toListResponse(List<Travel> travel);
+
+    List<Travel> toListDomain(List<TravelRequest> travel);
+
 }
