@@ -5,12 +5,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class DestinyResponse {
-
-    private double longitude;
+public class LocationResponse {
 
     private double latitude;
 
-    private String direction;
+    private double longitude;
 
+    private String direction;
 }

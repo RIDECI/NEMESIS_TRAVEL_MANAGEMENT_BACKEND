@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import edu.dosw.rideci.application.events.TravelCreatedEvent;
+import edu.dosw.rideci.application.port.out.EventPublisher;
 import edu.dosw.rideci.application.port.out.TravelRepositoryPort;
 import edu.dosw.rideci.domain.model.Travel;
-import edu.dosw.rideci.domain.model.Enum.Status;
+import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.exceptions.TravelNotFoundException;
 import edu.dosw.rideci.infrastructure.persistance.Entity.TravelDocument;
 import edu.dosw.rideci.infrastructure.persistance.Repository.mapper.TravelMapper;
@@ -18,12 +20,23 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
 
     private final TravelRepository travelRepository;
     private final TravelMapper travelMapper;
+    private final EventPublisher eventPublisher;
 
     @Override
     public Travel save(Travel travel) {
         TravelDocument document = travelMapper.toDocument(travel);
 
         TravelDocument savedTravel = travelRepository.save(document);
+
+        TravelCreatedEvent event = TravelCreatedEvent.builder()
+                .travelId(travel.getId())
+                .driverId(travel.getDriverId())
+                .origin(travel.getOrigin())
+                .destiny(travel.getDestiny())
+                .departureDateAndTime(travel.getDepartureDateAndTime())
+                .build();
+
+        eventPublisher.publish(event, "travel.created");
 
         return travelMapper.toDomain(savedTravel);
     }
@@ -56,8 +69,8 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         actualTravel.setDepartureDateAndTime(travel.getDepartureDateAndTime());
         actualTravel.setPassengersId(travel.getPassengersId());
         actualTravel.setConditions(travel.getConditions());
-        actualTravel.setOrigin(travelMapper.toOriginEmbeddable(travel.getOrigin()));
-        actualTravel.setDestiny(travelMapper.toDestinyEmbeddable(travel.getDestiny()));
+        actualTravel.setOrigin(travelMapper.toLocationEmbeddable(travel.getOrigin()));
+        actualTravel.setDestiny(travelMapper.toLocationEmbeddable(travel.getDestiny()));
 
         TravelDocument travelUpdated = travelRepository.save(actualTravel);
 

@@ -19,12 +19,12 @@ public class TravelResponse {
 
     private LocalDateTime departureDateAndTime;
 
-    private List<String> passengersId;
+    private List<Long> passengersId;
 
     private String conditions;
 
-    private OriginResponse origin;
+    private LocationResponse origin;
 
-    private DestinyResponse destiny;
+    private LocationResponse destiny;
 
 }

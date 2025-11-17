@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import edu.dosw.rideci.domain.model.Enum.Status;
+import edu.dosw.rideci.domain.model.enums.Status;
 import lombok.Builder;
 import lombok.Data;
 
@@ -28,12 +28,12 @@ public class TravelDocument {
 
     private LocalDateTime departureDateAndTime;
 
-    private List<String> passengersId;
+    private List<Long> passengersId;
 
     private String conditions;
 
-    private OriginDocument origin;
+    private LocationDocument origin;
 
-    private DestinyDocument destiny;
+    private LocationDocument destiny;
 
 }

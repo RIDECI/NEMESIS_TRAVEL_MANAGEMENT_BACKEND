@@ -4,11 +4,9 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 
-import edu.dosw.rideci.domain.model.Destiny;
-import edu.dosw.rideci.domain.model.Origin;
+import edu.dosw.rideci.domain.model.Location;
 import edu.dosw.rideci.domain.model.Travel;
-import edu.dosw.rideci.infrastructure.persistance.Entity.DestinyDocument;
-import edu.dosw.rideci.infrastructure.persistance.Entity.OriginDocument;
+import edu.dosw.rideci.infrastructure.persistance.Entity.LocationDocument;
 import edu.dosw.rideci.infrastructure.persistance.Entity.TravelDocument;
 
 @Mapper(componentModel = "spring")
@@ -18,9 +16,7 @@ public interface TravelMapper {
 
     Travel toDomain(TravelDocument travel);
 
-    OriginDocument toOriginEmbeddable(Origin origin);
-
-    DestinyDocument toDestinyEmbeddable(Destiny destiny);
+    LocationDocument toLocationEmbeddable(Location location);
 
     List<Travel> toListDomain(List<TravelDocument> travel);
 

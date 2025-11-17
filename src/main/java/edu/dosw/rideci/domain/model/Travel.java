@@ -3,7 +3,7 @@ package edu.dosw.rideci.domain.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import edu.dosw.rideci.domain.model.Enum.Status;
+import edu.dosw.rideci.domain.model.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,12 +29,12 @@ public class Travel {
 
     private LocalDateTime departureDateAndTime;
 
-    private List<String> passengersId;
+    private List<Long> passengersId;
 
     private String conditions;
 
-    private Origin origin;
+    private Location origin;
 
-    private Destiny destiny;
+    private Location destiny;
 
 }

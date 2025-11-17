@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class OriginRequest {
-
-    private double longitude;
+public class LocationRequest {
 
     private double latitude;
+
+    private double longitude;
 
     private String direction;
 

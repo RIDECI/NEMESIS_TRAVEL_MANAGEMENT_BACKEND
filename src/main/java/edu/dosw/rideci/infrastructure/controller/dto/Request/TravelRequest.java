@@ -3,7 +3,7 @@ package edu.dosw.rideci.infrastructure.controller.dto.Request;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import edu.dosw.rideci.domain.model.Enum.Status;
+import edu.dosw.rideci.domain.model.enums.Status;
 import lombok.Builder;
 import lombok.Data;
 
@@ -23,11 +23,12 @@ public class TravelRequest {
 
     private LocalDateTime departureDateAndTime;
 
-    private List<String> passengersId;
+    private List<Long> passengersId;
 
     private String conditions;
 
-    private OriginRequest origin;
+    private LocationRequest origin;
 
-    private DestinyRequest destiny;
+    private LocationRequest destiny;
+
 }

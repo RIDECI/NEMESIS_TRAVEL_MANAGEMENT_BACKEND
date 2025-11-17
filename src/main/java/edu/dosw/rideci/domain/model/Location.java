@@ -8,10 +8,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Origin {
+public class Location {
 
     private double longitude;
 

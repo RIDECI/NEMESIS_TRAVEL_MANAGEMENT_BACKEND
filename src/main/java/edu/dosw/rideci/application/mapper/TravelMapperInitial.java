@@ -4,12 +4,10 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 
-import edu.dosw.rideci.domain.model.Destiny;
-import edu.dosw.rideci.domain.model.Origin;
+import edu.dosw.rideci.domain.model.Location;
 import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
-import edu.dosw.rideci.infrastructure.controller.dto.Response.DestinyResponse;
-import edu.dosw.rideci.infrastructure.controller.dto.Response.OriginResponse;
+import edu.dosw.rideci.infrastructure.controller.dto.Response.LocationResponse;
 import edu.dosw.rideci.infrastructure.controller.dto.Response.TravelResponse;
 
 @Mapper(componentModel = "spring")
@@ -19,9 +17,7 @@ public interface TravelMapperInitial {
 
     Travel toDomain(TravelRequest travelRequest);
 
-    OriginResponse toOriginResponse(Origin origin);
-
-    DestinyResponse toDestinyResponse(Destiny destiny);
+    LocationResponse toLocationResponse(Location location);
 
     List<TravelResponse> toListResponse(List<Travel> travel);
 

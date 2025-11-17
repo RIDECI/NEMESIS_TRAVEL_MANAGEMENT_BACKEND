@@ -12,7 +12,7 @@ import edu.dosw.rideci.application.port.in.GetAllTravelUseCase;
 import edu.dosw.rideci.application.port.in.GetTravelUseCase;
 import edu.dosw.rideci.application.port.in.ModifyTravelUseCase;
 import edu.dosw.rideci.domain.model.Travel;
-import edu.dosw.rideci.domain.model.Enum.Status;
+import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
 import edu.dosw.rideci.application.port.out.TravelRepositoryPort;
 import lombok.RequiredArgsConstructor;
