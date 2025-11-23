@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import edu.dosw.rideci.domain.model.enums.Status;
+import edu.dosw.rideci.domain.model.enums.TravelType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -23,6 +24,8 @@ public class TravelDocument {
     private int availableSlots;
 
     private Status status;
+
+    private TravelType travelType;
 
     private double estimatedCost;
 

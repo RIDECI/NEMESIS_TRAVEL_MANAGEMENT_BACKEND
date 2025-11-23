@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import edu.dosw.rideci.domain.model.enums.Status;
+import edu.dosw.rideci.domain.model.enums.TravelType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +25,8 @@ public class Travel {
     private int availableSlots;
 
     private Status status;
+
+    private TravelType travelType;
 
     private double estimatedCost;
 

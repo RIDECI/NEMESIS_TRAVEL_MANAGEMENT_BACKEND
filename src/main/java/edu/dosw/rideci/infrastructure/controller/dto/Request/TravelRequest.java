@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import edu.dosw.rideci.domain.model.enums.Status;
+import edu.dosw.rideci.domain.model.enums.TravelType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -24,6 +25,8 @@ public class TravelRequest {
     private LocalDateTime departureDateAndTime;
 
     private List<Long> passengersId;
+
+    private TravelType travelType;
 
     private String conditions;
 
