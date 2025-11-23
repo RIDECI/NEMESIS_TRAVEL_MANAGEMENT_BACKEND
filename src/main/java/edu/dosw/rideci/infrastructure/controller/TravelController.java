@@ -49,7 +49,7 @@ public class TravelController {
 
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<TravelResponse> updateTravel(@PathVariable Long id,
             @RequestBody TravelRequest travelRequest) {
 
@@ -58,7 +58,7 @@ public class TravelController {
         return ResponseEntity.ok(updated);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<TravelResponse> getTravelById(@PathVariable Long id) {
 
         TravelResponse travel = travelMapper.toResponse(getTravelUseCase.getTravelById(id));
@@ -66,7 +66,7 @@ public class TravelController {
         return ResponseEntity.ok(travel);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTravelById(@PathVariable Long id) {
         deleteTravelUseCase.deleteTravelById(id);
 
@@ -85,7 +85,7 @@ public class TravelController {
 
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<TravelResponse> updateStatusTravel(@PathVariable Long id, @RequestBody Status status) {
 
         Travel travel = changeStateTravelUseCase.changeStateTravel(id, status);
