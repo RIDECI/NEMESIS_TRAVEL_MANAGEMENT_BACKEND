@@ -32,8 +32,11 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         TravelCreatedEvent event = TravelCreatedEvent.builder()
                 .travelId(travel.getId())
                 .driverId(travel.getDriverId())
+                .state(travel.getStatus())
                 .origin(travel.getOrigin())
                 .destiny(travel.getDestiny())
+                .passengersId(travel.getPassengersId())
+                .travelType(travel.getTravelType())
                 .departureDateAndTime(travel.getDepartureDateAndTime())
                 .build();
 
