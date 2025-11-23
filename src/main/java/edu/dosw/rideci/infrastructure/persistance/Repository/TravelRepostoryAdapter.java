@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import edu.dosw.rideci.application.events.TravelCompletedEvent;
 import edu.dosw.rideci.application.events.TravelCreatedEvent;
 import edu.dosw.rideci.application.port.out.EventPublisher;
 import edu.dosw.rideci.application.port.out.TravelRepositoryPort;
@@ -96,6 +97,14 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         travelToModifyState.setStatus(status);
 
         TravelDocument travelUpdated = travelRepository.save(travelToModifyState);
+
+        if (status.equals(Status.COMPLETED)) {
+            TravelCompletedEvent completedEvent = TravelCompletedEvent.builder()
+                    .travelId(travelToModifyState.getId())
+                    .state(travelToModifyState.getStatus())
+                    .build();
+            eventPublisher.publish(completedEvent, "travel.completed");
+        }
 
         return travelMapper.toDomain(travelUpdated);
 

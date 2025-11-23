@@ -18,6 +18,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue travelCompletedQueue() {
+        return new Queue("travel.completed.queue", true);
+    }
+
+    @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
@@ -30,6 +35,11 @@ public class RabbitConfig {
     @Bean
     public Binding bindingTravelCreated() {
         return BindingBuilder.bind(travelCreatedQueue()).to(travelExchange()).with("travel.created");
+    }
+
+    @Bean
+    public Binding bindingTravelCompleted() {
+        return BindingBuilder.bind(travelCompletedQueue()).to(travelExchange()).with("travel.completed");
     }
 
 }
