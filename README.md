@@ -255,3 +255,7 @@ Implementa los **detalles técnicos**: controladores REST, persistencia, configu
 
 
 ![Diagrama de Despliegue](docs/diagramaDespliegue.png)
+
+### Pruebas unitarias
+<img width="1872" height="367" alt="image" src="https://github.com/user-attachments/assets/c56e6128-90db-4a93-936f-d0a7ebf91a6e" />
+
