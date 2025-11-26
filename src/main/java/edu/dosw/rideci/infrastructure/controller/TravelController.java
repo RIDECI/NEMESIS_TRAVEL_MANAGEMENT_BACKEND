@@ -14,6 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import edu.dosw.rideci.application.mapper.TravelMapperInitial;
 import edu.dosw.rideci.application.port.in.ChangeStateTravelUseCase;
 import edu.dosw.rideci.application.port.in.CreateTravelUseCase;
@@ -30,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/travels")
 @RequiredArgsConstructor
+@Tag(name = "Travel Management", description = "API para gestión de viajes en RIDECI")
 public class TravelController {
 
     private final CreateTravelUseCase createTravelUseCase;
@@ -41,7 +50,8 @@ public class TravelController {
     private final TravelMapperInitial travelMapper;
 
     @PostMapping("")
-    public ResponseEntity<TravelResponse> createTravel(@RequestBody TravelRequest travelRequest) {
+    public ResponseEntity<TravelResponse> createTravel(
+            @Parameter(description = "Datos del viaje a crear", required = true) @RequestBody TravelRequest travelRequest) {
         Travel travel = travelMapper.toDomain(travelRequest);
         TravelResponse created = travelMapper.toResponse(createTravelUseCase.createTravel(travel));
 
@@ -50,8 +60,9 @@ public class TravelController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TravelResponse> updateTravel(@PathVariable Long id,
-            @RequestBody TravelRequest travelRequest) {
+    public ResponseEntity<TravelResponse> updateTravel(
+            @Parameter(description = "ID del viaje a actualizar", required = true) @PathVariable Long id,
+            @Parameter(description = "Nuevos datos del viaje", required = true) @RequestBody TravelRequest travelRequest) {
 
         TravelResponse updated = travelMapper.toResponse(modifyTravelUseCase.updateTravel(id, travelRequest));
 
@@ -59,7 +70,8 @@ public class TravelController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TravelResponse> getTravelById(@PathVariable Long id) {
+    public ResponseEntity<TravelResponse> getTravelById(
+            @Parameter(description = "ID del viaje a buscar", required = true) @PathVariable Long id) {
 
         TravelResponse travel = travelMapper.toResponse(getTravelUseCase.getTravelById(id));
 
@@ -67,7 +79,8 @@ public class TravelController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTravelById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTravelById(
+            @Parameter(description = "ID del viaje a eliminar", required = true) @PathVariable Long id) {
         deleteTravelUseCase.deleteTravelById(id);
 
         return ResponseEntity.noContent().build();
@@ -86,7 +99,9 @@ public class TravelController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<TravelResponse> updateStatusTravel(@PathVariable Long id, @RequestBody Status status) {
+    public ResponseEntity<TravelResponse> updateStatusTravel(
+            @Parameter(description = "ID del viaje", required = true) @PathVariable Long id,
+            @Parameter(description = "Nuevo estado del viaje", required = true) @RequestBody Status status) {
 
         Travel travel = changeStateTravelUseCase.changeStateTravel(id, status);
 
