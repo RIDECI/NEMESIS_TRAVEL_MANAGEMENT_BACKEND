@@ -1,5 +1,7 @@
 package edu.dosw.rideci.infrastructure.persistance.Repository;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -10,6 +12,7 @@ import edu.dosw.rideci.application.port.out.EventPublisher;
 import edu.dosw.rideci.application.port.out.TravelRepositoryPort;
 import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.domain.model.enums.Status;
+import edu.dosw.rideci.domain.model.enums.TravelType;
 import edu.dosw.rideci.exceptions.TravelNotFoundException;
 import edu.dosw.rideci.infrastructure.persistance.Entity.TravelDocument;
 import edu.dosw.rideci.infrastructure.persistance.Repository.mapper.TravelMapper;
@@ -25,18 +28,35 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
 
     @Override
     public Travel save(Travel travel) {
-        TravelDocument document = travelMapper.toDocument(travel);
+        TravelDocument document = TravelDocument.builder()
+                .id(travel.getId())
+                .organizerId(travel.getOrganizerId())
+                .driverId(travel.getDriverId())
+                .availableSlots(travel.getAvailableSlots())
+                .status(Status.ACTIVE)
+                .travelType(TravelType.TRIP)
+                .estimatedCost(travel.getEstimatedCost())
+                .departureDateAndTime(travel.getDepartureDateAndTime())
+                .passengersId(travel.getPassengersId())
+                .conditions(travel.getConditions())
+                .origin(travelMapper.toLocationEmbeddable(travel.getOrigin()))
+                .destiny(travelMapper.toLocationEmbeddable(travel.getDestiny()))
+                .build();
 
         TravelDocument savedTravel = travelRepository.save(document);
 
         TravelCreatedEvent event = TravelCreatedEvent.builder()
-                .travelId(travel.getId())
-                .driverId(travel.getDriverId())
-                .state(travel.getStatus())
-                .origin(travel.getOrigin())
-                .destiny(travel.getDestiny())
-                .passengersId(travel.getPassengersId())
-                .travelType(travel.getTravelType())
+                .travelId(document.getId())
+                .organizerId(document.getOrganizerId())
+                .driverId(document.getDriverId())
+                .availableSlots(document.getAvailableSlots())
+                .status(document.getStatus())
+                .estimatedCost(document.getEstimatedCost())
+                .travelType(document.getTravelType())
+                .origin(travelMapper.toLocationDomain(document.getOrigin()))
+                .destiny(travelMapper.toLocationDomain(document.getDestiny()))
+                .passengersId(document.getPassengersId())
+                .conditions(document.getConditions())
                 .departureDateAndTime(travel.getDepartureDateAndTime())
                 .build();
 
@@ -110,6 +130,24 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         }
 
         return travelMapper.toDomain(travelUpdated);
+
+    }
+
+    @Override
+    public List<Long> getPassengerList(Long id, List<Long> passengerList) {
+
+        TravelDocument travel = travelRepository.findById(id)
+                .orElseThrow(() -> new TravelNotFoundException("The travel with id: {id} not found "));
+
+        boolean equals = new HashSet<>(travel.getPassengersId()).equals(new HashSet<>(passengerList));
+
+        if (equals) {
+            return passengerList;
+        }
+
+        List<Long> passengersNullList = new ArrayList();
+
+        return passengersNullList;
 
     }
 

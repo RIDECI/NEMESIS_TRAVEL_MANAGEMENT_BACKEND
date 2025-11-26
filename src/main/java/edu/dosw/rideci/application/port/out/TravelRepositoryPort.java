@@ -19,4 +19,6 @@ public interface TravelRepositoryPort {
 
     Travel changeStateTravel(Long id, Status status);
 
+    List<Long> getPassengerList(Long id, List<Long> passengersId);
+
 }

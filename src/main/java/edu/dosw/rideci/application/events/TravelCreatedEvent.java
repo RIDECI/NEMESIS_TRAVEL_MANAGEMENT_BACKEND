@@ -21,18 +21,26 @@ public class TravelCreatedEvent {
 
     private Long travelId;
 
+    private Long organizerId;
+
     private Long driverId;
 
-    private Status state;
+    private int availableSlots;
+
+    private Status status;
+
+    private TravelType travelType;
+
+    private double estimatedCost;
+
+    private LocalDateTime departureDateAndTime;
+
+    private List<Long> passengersId;
+
+    private String conditions;
 
     private Location origin;
 
     private Location destiny;
-
-    private List<Long> passengersId;
-
-    private TravelType travelType;
-
-    private LocalDateTime departureDateAndTime;
 
 }

@@ -42,4 +42,6 @@ public class RabbitConfig {
         return BindingBuilder.bind(travelCompletedQueue()).to(travelExchange()).with("travel.completed");
     }
 
+    // Microservicio de Perfiles -> Consumer
+
 }

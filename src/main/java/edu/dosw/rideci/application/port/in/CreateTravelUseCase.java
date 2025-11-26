@@ -1,9 +1,10 @@
 package edu.dosw.rideci.application.port.in;
 
 import edu.dosw.rideci.domain.model.Travel;
+import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
 
 public interface CreateTravelUseCase {
 
-    Travel createTravel(Travel travel);
+    Travel createTravel(TravelRequest travel);
 
 }

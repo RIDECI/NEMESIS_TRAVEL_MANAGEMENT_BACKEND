@@ -14,12 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import edu.dosw.rideci.application.mapper.TravelMapperInitial;
@@ -27,6 +22,7 @@ import edu.dosw.rideci.application.port.in.ChangeStateTravelUseCase;
 import edu.dosw.rideci.application.port.in.CreateTravelUseCase;
 import edu.dosw.rideci.application.port.in.DeleteTravelUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelUseCase;
+import edu.dosw.rideci.application.port.in.GetPassengerListUseCase;
 import edu.dosw.rideci.application.port.in.GetTravelUseCase;
 import edu.dosw.rideci.application.port.in.ModifyTravelUseCase;
 import edu.dosw.rideci.domain.model.Travel;
@@ -47,13 +43,14 @@ public class TravelController {
     private final ModifyTravelUseCase modifyTravelUseCase;
     private final GetAllTravelUseCase getAllTravelUseCase;
     private final ChangeStateTravelUseCase changeStateTravelUseCase;
+    private final GetPassengerListUseCase getPassengerListUseCase;
     private final TravelMapperInitial travelMapper;
 
     @PostMapping("")
     public ResponseEntity<TravelResponse> createTravel(
             @Parameter(description = "Datos del viaje a crear", required = true) @RequestBody TravelRequest travelRequest) {
-        Travel travel = travelMapper.toDomain(travelRequest);
-        TravelResponse created = travelMapper.toResponse(createTravelUseCase.createTravel(travel));
+        TravelResponse created = travelMapper
+                .toResponse(createTravelUseCase.createTravel(travelRequest));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
 
@@ -110,4 +107,13 @@ public class TravelController {
         return ResponseEntity.ok(travelUpdated);
 
     }
+
+    @GetMapping("/occupantList/{id}")
+    public ResponseEntity<List<Long>> getOccupantList(
+            @PathVariable Long id, @RequestBody List<Long> passengersList) {
+
+        return ResponseEntity.ok(getPassengerListUseCase.getPassengerList(id, passengersList));
+
+    }
+
 }

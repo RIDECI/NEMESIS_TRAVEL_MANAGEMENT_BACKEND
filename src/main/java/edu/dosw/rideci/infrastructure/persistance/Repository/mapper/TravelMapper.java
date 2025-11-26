@@ -18,6 +18,8 @@ public interface TravelMapper {
 
     LocationDocument toLocationEmbeddable(Location location);
 
+    Location toLocationDomain(LocationDocument location);
+
     List<Travel> toListDomain(List<TravelDocument> travel);
 
     List<TravelDocument> toListDocument(List<Travel> travel);

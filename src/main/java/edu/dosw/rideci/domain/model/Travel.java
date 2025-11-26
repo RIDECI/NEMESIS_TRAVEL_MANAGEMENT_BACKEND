@@ -20,6 +20,8 @@ public class Travel {
 
     private Long id;
 
+    private Long organizerId;
+
     private Long driverId;
 
     private int availableSlots;
