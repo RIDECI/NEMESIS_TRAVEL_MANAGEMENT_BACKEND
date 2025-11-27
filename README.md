@@ -256,8 +256,12 @@ Implementa los **detalles técnicos**: controladores REST, persistencia, configu
 
 ![Diagrama de Despliegue](docs/diagramaDespliegue.png)
 
-### Pruebas unitarias
+### 🧪 Pruebas unitarias del controlador y cobertura de codigo
 <img width="1872" height="367" alt="image" src="https://github.com/user-attachments/assets/c56e6128-90db-4a93-936f-d0a7ebf91a6e" />
 <img width="1915" height="315" alt="image" src="https://github.com/user-attachments/assets/eb6e8f34-6613-411c-9167-6d68ba9cb146" />
+
+### 🧪 pruebas unitarias del adaptador y cobertura del codigo
+<img width="1914" height="430" alt="image" src="https://github.com/user-attachments/assets/d34a1650-5b33-4770-a844-5718a848a70e" />
+<img width="1912" height="247" alt="image" src="https://github.com/user-attachments/assets/3f9635ca-5339-4a2f-87e7-d515ba2171c2" />
 
 
