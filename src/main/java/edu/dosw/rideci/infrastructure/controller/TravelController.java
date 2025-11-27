@@ -66,12 +66,18 @@ public class TravelController {
         return ResponseEntity.ok(updated);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<TravelResponse>> getAllTravels() {
+        List<Travel> travel = getAllTravelUseCase.getAllTravels();
+        List<TravelResponse> travelResponse = travelMapper.toListResponse(travel);
+        return ResponseEntity.ok(travelResponse);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<TravelResponse> getTravelById(
             @Parameter(description = "ID del viaje a buscar", required = true) @PathVariable Long id) {
 
         TravelResponse travel = travelMapper.toResponse(getTravelUseCase.getTravelById(id));
-
         return ResponseEntity.ok(travel);
     }
 
@@ -79,20 +85,7 @@ public class TravelController {
     public ResponseEntity<Void> deleteTravelById(
             @Parameter(description = "ID del viaje a eliminar", required = true) @PathVariable Long id) {
         deleteTravelUseCase.deleteTravelById(id);
-
         return ResponseEntity.noContent().build();
-
-    }
-
-    @GetMapping("/allTravels")
-    public ResponseEntity<List<TravelResponse>> getAllTravels() {
-
-        List<Travel> travel = getAllTravelUseCase.getAllTravels();
-
-        List<TravelResponse> travelResponse = travelMapper.toListResponse(travel);
-
-        return ResponseEntity.ok(travelResponse);
-
     }
 
     @PatchMapping("/{id}")
@@ -101,11 +94,8 @@ public class TravelController {
             @Parameter(description = "Nuevo estado del viaje", required = true) @RequestBody Status status) {
 
         Travel travel = changeStateTravelUseCase.changeStateTravel(id, status);
-
         TravelResponse travelUpdated = travelMapper.toResponse(travel);
-
         return ResponseEntity.ok(travelUpdated);
-
     }
 
     @GetMapping("/occupantList/{id}")
