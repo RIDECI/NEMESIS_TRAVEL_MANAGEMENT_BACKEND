@@ -14,19 +14,21 @@ public class TravelRequest {
 
     private Long id;
 
+    private Long organizerId;
+
     private Long driverId;
 
     private int availableSlots;
 
     private Status status;
 
+    private TravelType travelType;
+
     private double estimatedCost;
 
     private LocalDateTime departureDateAndTime;
 
     private List<Long> passengersId;
-
-    private TravelType travelType;
 
     private String conditions;
 
