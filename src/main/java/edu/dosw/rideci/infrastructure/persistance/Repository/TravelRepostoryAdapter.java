@@ -145,9 +145,7 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
             return passengerList;
         }
 
-        List<Long> passengersNullList = new ArrayList();
-
-        return passengersNullList;
+        return new ArrayList<>();
 
     }
 

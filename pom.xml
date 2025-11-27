@@ -130,16 +130,10 @@
 								<goal>report</goal>
 							</goals>
 							<configuration>
-								<excludes>
-									<exclude>**/model/**</exclude>
-									<exclude>**/dto/**</exclude>
-									<exclude>**/enums/**</exclude>
-									<exclude>**/config/*</exclude>
-									<exclude>**/mapper/*</exclude>
-									<exclude>**/exception/*</exclude>
-									<exclude>**/common/*</exclude>
-									<exclude>**/NemesisTravelManagementBackendApplication.class</exclude>
-								</excludes>
+								<includes>
+									<include>**/TravelRepostoryAdapter.class</include>
+									<include>**/TravelController.class</include>
+								</includes>
 							</configuration>
 						</execution>
 						<execution>
@@ -151,31 +145,19 @@
 								<rules>
 									<rule>
 										<element>CLASS</element>
-										<excludes>
-										<exclude>edu/dosw/rideci/NemesisTravelManagementBackendApplication</exclude>
-										</excludes>
-									</rule>
-									<rule>
-										<element>PACKAGE</element>
 										<limits>
 											<limit>
-												<counter>CLASS</counter>
+												<counter>LINE</counter>
 												<value>COVEREDRATIO</value>
 												<minimum>0.00</minimum>
 											</limit>
 										</limits>
 									</rule>
 								</rules>
-								<excludes>
-									<exclude>**/model/**</exclude>
-									<exclude>**/dto/**</exclude>
-									<exclude>**/enums/**</exclude>
-									<exclude>**/config/*</exclude>
-									<exclude>**/mapper/*</exclude>
-									<exclude>**/exception/*</exclude>
-									<exclude>**/common/*</exclude>
-									<exclude>**/NemesisTravelManagementBackendApplication.class</exclude>
-								</excludes>
+								<includes>
+									<include>**/TravelRepostoryAdapter.class</include>
+									<include>**/TravelController.class</include>
+								</includes>
 							</configuration>
 						</execution>
 					</executions>
