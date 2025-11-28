@@ -1,159 +1,48 @@
-# 🚀 NEMESIS_TRAVEL_MANAGEMENT_BACKEND
+# 📍 Nemesis - Travel Management Backend
 
-## 👥 Desarrolladores
+This module is designed to manage travels within the RideCi ecosystem: it creates, updates, lists and deletes trips, handles their status (e.g. CREATED, IN_PROGRESS, COMPLETED, CANCELED) and exposes this information to other microservices.
 
-* 🧑‍💻 Santiago Carmona Pineda
-* 🧑‍💻 Tulio Riaño Sánchez
-* 🧑‍💻 Daniel Patiño Mejia
-* 🧑‍💻 Juan Felipe Rangel Rodríguez
+## 👥 Developers
 
----
+- Santiago Carmona Pineda
+- Tulio Riaño Sanchez
+- Daniel Patiño Mejia
+- Juan Felipe Rangel Rodriguez
 
-## 📑 Tabla de Contenidos
 
-* 📌 [ Estrategia de Versionamiento y Branching](#-estrategia-de-versionamiento-y-branching)
+## 📑 Content Table
 
-    * 🌿 [ Estrategia de Ramas (Git Flow)](#-estrategia-de-ramas-git-flow)
-    * 🏷️ [ Convenciones de Nomenclatura](#-convenciones-de-nomenclatura)
-    * 📝 [ Convenciones de Commits](#-convenciones-de-commits)
-* 🏗️ [ Arquitectura del Proyecto](#-arquitectura-del-proyecto)
-
-    * 🧱 [ Estructura de Capas](#️-estructura-de-capas)
-* 🛠️ [ Tecnologías Utilizadas](#️-tecnologías-utilizadas)
-* 🧼 [ Arquitectura Limpia - Organización de Capas](#️-arquitectura-limpia---organización-de-capas)
-* 📊 [Diagramas del Módulo](#diagramas-del-módulo)
-
----
-
-## 🗂️ Estrategia de Versionamiento y Branching
-
-Se implementa una estrategia de versionamiento basada en **GitFlow**, garantizando un flujo de desarrollo **colaborativo, trazable y controlado**.
-
-### ✅ Beneficios:
-
-- 🤝 Permite trabajo paralelo sin conflictos
-- 🛡️ Mantiene versiones estables y controladas
-- 🚑 Facilita correcciones urgentes (*hotfixes*)
-- 📜 Proporciona un historial limpio y entendible
+1. [Project Architecture](#-project-architecture)
+    - [Hexagonal Structure](#-clean---hexagonal-structure)
+2. [API Documentation](#-api-endpoints)
+    - [Endpoints](#-api-endpoints)
+3. [Input & Output Data](#input-and-output-data)
+4. [Microservices Integration](#-connections-with-other-microservices)
+5. [Technologies](#technologies)
+6. [Branch Strategy](#-branches-strategy--structure)
+7. [System Architecture & Design](#-system-architecture--design)
+8. [Getting Started](#-getting-started)
+9. [Testing](#-testing)
 
 ---
+## 🏛️ Project Architecture
 
-## 🌿 Estrategia de Ramas (Git Flow)
+The Nemesis - Travel Management backend follows a decoupled hexagonal / clean architecture that isolates the business logic from infrastructure and external services by splitting the code into multiple components:
 
-| **Rama**                | **Propósito**                            | **Recibe de**           | **Envía a**        | **Notas**                      |
-| ----------------------- | ---------------------------------------- | ----------------------- | ------------------ | ------------------------------ |
-| `main`                  | 🏁 Código estable para PREPROD o Producción | `release/*`, `hotfix/*` | 🚀 Despliegue      | 🔐 Protegida con PR y CI exitoso  |
-| `develop`               | 🧪 Rama principal de desarrollo             | `feature/*`             | `release/*`        | 🔄 Base para integración continua |
-| `feature/*`             | ✨ Nuevas funcionalidades o refactors       | `develop`               | `develop`          | 🧹 Se eliminan tras el merge      |
-| `release/*`             | 📦 Preparación de versiones estables        | `develop`               | `main` y `develop` | 🧪 Incluye pruebas finales        |
-| `bugfix/*` o `hotfix/*` | 🛠️ Corrección de errores críticos           | `main`                  | `main` y `develop` | ⚡ Parches urgentes               |
+* **🧠 Domain (Core)**: Contains the travel entities, value objects, enums (`Status`, `TravelType`) and the core business rules.
 
----
+* **🎯 Ports (Interfaces)**: Interfaces that define which operations the domain can perform (use cases exposed as input ports and required external interactions as output ports).
 
-## 🏷️ Convenciones de Nomenclatura
+* **🔌 Adapters (Infrastructure)**: Implementations of the ports that connect the domain with technologies such as HTTP controllers, MongoDB persistence and RabbitMQ.
 
-### ✨ Feature Branches
+Main benefits of this architecture:
 
-```
-feature/[nombre-funcionalidad]
-```
+* ✅ **Separation of Concerns:** Clear limits between business logic and infrastructure.
+* ✅ **Maintainability:** Easier to modify or replace specific components.
+* ✅ **Scalability:** Components can evolve and scale independently.
+* ✅ **Testability:** The domain can be tested in isolation without database or web server.
 
-**Ejemplos:**
-
-```
-- feature/authentication-module
-- feature/security-servicr
-```
-
-**Reglas:**
-
-* 🧩 Formato: *kebab-case*
-* 🪪 Incluir código Jira
-* ✍️ Descripción breve y clara
-* 📏 Longitud máxima: 50 caracteres
-
----
-
-### 📦 Release Branches
-
-```
-release/[version]
-```
-
-**Ejemplos:**
-
-```
-- release/1.0.0
-- release/1.1.0-beta
-```
-
----
-
-### 🚑 Hotfix Branches
-
-```
-hotfix/[descripcion-breve-del-fix]
-```
-
-**Ejemplos:**
-
-```
-- hotfix/fix-token-expiration
-- hotfix/security-patch
-```
-
----
-
-## 📝 Convenciones de Commits
-
-### 🧱 Formato Estándar
-
-```
-[tipo]: [descripción breve de la acción]
-```
-
-**Ejemplos:**
-
-```
-feat: agregar validación de token JWT
-fix: corregir error en autenticación por roles
-```
-
----
-
-### 📂 Tipos de Commit
-
-| **Tipo**   | **Descripción**                      | **Ejemplo**                             |
-| ----------- | ------------------------------------ | --------------------------------------- |
-| `feat`      | ✨ Nueva funcionalidad               | `feat: implementar autenticación con JWT` |
-| `fix`       | 🛠️ Corrección de errores             | `fix: solucionar error en endpoint de login` |
-| `docs`      | 📚 Cambios en documentación          | `docs: actualizar README con nuevas rutas` |
-| `refactor`  | 🔧 Refactor sin cambio funcional     | `refactor: optimizar servicio de seguridad` |
-| `test`      | 🧪 Pruebas unitarias o integración   | `test: agregar tests para AuthService`  |
-| `chore`     | 🧹 Mantenimiento o configuración     | `chore: actualizar dependencias de Maven` |
-
-**Reglas:**
-
-* ✅ Un commit = una acción completa
-* ✂️ Máximo **72 caracteres** por línea
-* 🗣️ Usar modo imperativo (“agregar”, “corregir”, etc.)
-* 🔍 Descripción clara de qué y dónde
-* 🪜 Commits pequeños y frecuentes
-
----
-
-## 🏗️ Arquitectura del Proyecto
-
-El backend de **NEMESIS_TRAVEL_MANAGEMENT** sigue una **arquitectura limpia y desacoplada**, priorizando:
-
-* 🧩 Separación de responsabilidades
-* 🛠️ Mantenibilidad
-* 📈 Escalabilidad
-* 🧪 Facilidad de pruebas
-
----
-
-## 🧱 Estructura de Capas
+## 📂 Clean - Hexagonal Structure
 
 ```
 📂 nemesis_travel_management_backend
@@ -163,26 +52,42 @@ El backend de **NEMESIS_TRAVEL_MANAGEMENT** sigue una **arquitectura limpia y de
  ┃ ┃ ┃ ┗ 📂 edu/dosw/rideci/
  ┃ ┃ ┃   ┣ 📄 NemesisTravelManagementBackendApplication.java
  ┃ ┃ ┃   ┣ 📂 domain/
- ┃ ┃ ┃   ┃ ┗ 📂 model/            # 🧠 Modelos del dominio
+ ┃ ┃ ┃   ┃ ┗ 📂 model/            # 🧠 Domain models (Travel, Location, enums)
  ┃ ┃ ┃   ┣ 📂 application/
- ┃ ┃ ┃   ┃ ┣ 📂 ports/
- ┃ ┃ ┃   ┃ ┃ ┣ 📂 input/          # 🎯 Puertos de entrada (casos de uso expuestos)
- ┃ ┃ ┃   ┃ ┃ ┗ 📂 output/         # 🔌 Puertos de salida (gateways externos)
- ┃ ┃ ┃   ┃ ┗ 📂 usecases/         # ⚙️ Implementaciones de casos de uso
+ ┃ ┃ ┃   ┃ ┣ 📂 events/           # 📡 Domain events (TravelCreatedEvent, TravelCompletedEvent)
+ ┃ ┃ ┃   ┃ ┣ 📂 mapper/           # 🔄 Mappers between domain and infrastructure DTOs
+ ┃ ┃ ┃   ┃ ┣ 📂 port/
+ ┃ ┃ ┃   ┃ ┃ ┗ 📂 in/             # 🎯 Input ports (use case interfaces)
+ ┃ ┃ ┃   ┃ ┗ 📂 service/          # ⚙️ Use case implementations (TravelService)
+ ┃ ┃ ┃   ┣ 📂 exceptions/         # ❗ Custom domain/infrastructure exceptions
  ┃ ┃ ┃   ┣ 📂 infrastructure/
- ┃ ┃ ┃   ┃ ┗ 📂 adapters/
- ┃ ┃ ┃   ┃   ┣ 📂 input/
- ┃ ┃ ┃   ┃   ┃ ┗ 📂 controller/   # 🌐 Adaptadores de entrada (REST controllers)
- ┃ ┃ ┃   ┃   ┗ 📂 output/
- ┃ ┃ ┃   ┃     ┗ 📂 persistence/  # 🗄️ Adaptadores de salida (persistencia)
+ ┃ ┃ ┃   ┃ ┣ 📂 config/           # ⚙️ Spring / Infra configuration (OpenAPI, RabbitMQ)
+ ┃ ┃ ┃   ┃ ┣ 📂 controller/
+ ┃ ┃ ┃   ┃ ┃ ┣ 📄 TravelController.java   # 🌐 REST controllers
+ ┃ ┃ ┃   ┃ ┃ ┗ 📂 dto/                   # 📨 Request / Response DTOs
+ ┃ ┃ ┃   ┃ ┃   ┣ 📂 Request/
+ ┃ ┃ ┃   ┃ ┃   ┗ 📂 Response/
+ ┃ ┃ ┃   ┃ ┗ 📂 persistance/
+ ┃ ┃ ┃   ┃   ┣ 📂 Entity/          # 🗄️ MongoDB documents (TravelDocument, LocationDocument)
+ ┃ ┃ ┃   ┃   ┣ 📂 Repository/      # 🧰 Spring Data repositories & adapters
+ ┃ ┃ ┃   ┃   ┃ ┣ 📄 TravelRepository.java
+ ┃ ┃ ┃   ┃   ┃ ┣ 📄 TravelRepostoryAdapter.java
+ ┃ ┃ ┃   ┃   ┃ ┗ 📄 RabbitEventPublisher.java
  ┃ ┃ ┗ 📂 resources/
  ┃ ┃   ┗ 📄 application.properties
  ┣ 📂 test/
  ┃ ┣ 📂 java/
- ┃ ┃ ┗ 📂 edu/dosw/rideci/NEMESIS_TRAVEL_MANAGEMENT_BACKEND/
- ┃ ┃   ┗ 📄 NemesisTravelManagementBackendApplicationTests.java
+ ┃ ┃ ┗ 📂 edu/dosw/rideci/
+ ┃ ┃   ┣ 📄 NemesisTravelManagementBackendApplicationTests.java
+ ┃ ┃   ┣ 📂 Adapter/
+ ┃ ┃   ┃ ┗ 📄 TravelRepositoryAdapterTest.java
+ ┃ ┃   ┗ 📂 Controller/
+ ┃ ┃     ┗ 📄 TravelControllerTest.java
  ┣ 📂 docs/
+ ┃ ┣ diagramaCasosUso.png
  ┃ ┣ diagramaClases.jpg
+ ┃ ┣ diagramaComponentes.png
+ ┃ ┣ diagramaContexto.png
  ┃ ┣ diagramaDatos.jpg
  ┃ ┗ diagramaDespliegue.png
  ┣ 📄 pom.xml
@@ -190,78 +95,309 @@ El backend de **NEMESIS_TRAVEL_MANAGEMENT** sigue una **arquitectura limpia y de
  ┗ 📄 README.md
 ```
 
+# 📡 API Endpoints
+
+For detailed documentation refer to Swagger UI (running locally at `http://localhost:8080/swagger-ui.html`).
+
+Below is a summary of the main REST endpoints exposed by `TravelController` (base path may vary, e.g. `/api/v1/travels`).
+
+> Note: Adjust the exact URIs if your controller mapping differs.
+
+| Method | URI                        | Description                          | Request Body / Params |
+| :----- | :------------------------- | :----------------------------------- | :-------------------- |
+| `POST` | `/api/v1/travels`         | Creates a new travel                 | `TravelRequest` (JSON) |
+| `GET`  | `/api/v1/travels`         | Retrieves all travels                | — |
+| `GET`  | `/api/v1/travels/{id}`    | Retrieves a travel by ID             | `id` (Path Variable) |
+| `PUT`  | `/api/v1/travels/{id}`    | Modifies an existing travel          | `id` + `TravelRequest` (JSON) |
+| `PATCH`| `/api/v1/travels/{id}/status` | Changes the status of a travel   | `id` + new status (e.g. query/body) |
+| `GET`  | `/api/v1/travels/{id}/passengers` | Gets passenger list for a travel | `id` (Path Variable) |
+| `DELETE` | `/api/v1/travels/{id}`  | Deletes a travel by ID               | `id` (Path Variable) |
+
+
+### 📟 HTTP Status Codes
+Common status codes returned by the API.
+
+| Code | Status | Description |
+| :--- | :--- | :--- |
+| `200` | **OK** | Request processed successfully. |
+| `201` | **Created** | Travel created successfully. |
+| `204` | **No Content** | Travel deleted successfully. |
+| `400` | **Bad Request** | Invalid data or missing parameters. |
+| `404` | **Not Found** | Travel ID does not exist. |
+| `500` | **Internal Server Error** | Unexpected error on server side.|
+
+# Input and Output Data
+
+Data information per functionality (simplified overview):
+
+- **TravelRequest (Input)**
+  - `origin` (LocationRequest)
+  - `destination` (LocationRequest)
+  - `travelType` (e.g. ONE_WAY, ROUND_TRIP)
+  - `departureTime`
+  - Optional passenger info depending on design
+
+- **TravelResponse (Output)**
+  - `id`
+  - `origin` / `destination` (LocationResponse)
+  - `status` (from `Status` enum)
+  - `travelType`
+  - `createdAt` / `updatedAt`
+  - Additional travel details
+
+- **LocationRequest / LocationResponse**
+  - Coordinates or semantic location data used by travels.
+
+You can inspect `LocationRequest`, `LocationResponse`, `TravelRequest` and `TravelResponse` classes under `infrastructure/controller/dto` for full details.
+
+
+# 🔗 Connections with other Microservices
+
+This module is part of the RideCi ecosystem and typically interacts with other services via REST and message broker (RabbitMQ):
+
+1. **Routes & Tracking Module**: May consume travel events (`TravelCreatedEvent`, `TravelCompletedEvent`) to start or stop geolocation tracking.
+2. **Profiles / Passengers Module**: Provides passenger data associated with a travel.
+3. **Notifications Module**: Sends alerts related to travel state changes (start, completion, cancellation, etc.).
+
+# Technologies
+
+The following technologies were used to build and deploy this module:
+
+### Backend & Core
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white)
+
+### Database
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+
+### DevOps & Infrastructure
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
+![Railway](https://img.shields.io/badge/Railway-131415?style=for-the-badge&logo=railway&logoColor=white)
+![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
+
+### CI/CD & Quality Assurance
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+![SonarQube](https://img.shields.io/badge/SonarQube-4E9BCD?style=for-the-badge&logo=sonarqube&logoColor=white)
+![JaCoCo](https://img.shields.io/badge/JaCoCo-Coverage-green?style=for-the-badge)
+
+### Documentation & Testing
+![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+
+### Design
+![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+
+### Comunication & Project Management
+![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white)
+![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 ---
 
-## 🛠️ Tecnologías Utilizadas
+# 🌿 Branches Strategy & Structure
 
-| **Categoría**              | **Tecnologías**                           |
-| -------------------------- | ----------------------------------------- |
-| **Backend**                | ☕ Java 17, Spring Boot, Maven             |
-| **Base de Datos**          | 🐘 PostgreSQL, 🍃 MongoDB                  |
-| **Infraestructura**        | 🐳 Docker, ☸️ Kubernetes (K8s), 🚆 Railway, ▲ Vercel |
-| **Seguridad**              | 🔐 JWT, Spring Security                    |
-| **Integración Continua**   | 🤖 GitHub Actions, 📊 Jacoco, 🧠 SonarQube  |
-| **Documentación y Diseño** | 📖 Swagger UI, 🎨 Figma                    |
-| **Comunicación y Gestión** | 💬 Slack, 🧾 Jira                          |
-| **Testing**                | 🧪 Postman                                 |
+This module follows a strict branching strategy based on Gitflow to ensure the ordered versioning, code quality and continuous integration.
+
+
+
+| **Branch**                | **Purpose**                            | **Receive of**           | **Sent to**        | **Notes**                      |
+| ----------------------- | ---------------------------------------- | ----------------------- | ------------------ | ------------------------------ |
+| `main`                  | 🏁 Stable code for preproduction or Production | `release/*`, `hotfix/*` | 🚀 Production      | 🔐 Protected with PR y successful CI   |
+| `develop`               | 🧪 Main developing branch             | `feature/*`             | `release/*`        | 🔄 Base to continuous deployment |
+| `feature/*`             | ✨ New functions or refactors to be implemented       | `develop`               | `develop`          | 🧹 Are deleted after merge to develop      |
+| `release/*`             | 📦 Release preparation & final polish.      | `develop`               | `main` y `develop` | 🧪  Includes final QA. No new features added here.     |
+| `bugfix/*` o `hotfix/*` | 🛠️ Critical fixes for production         | `main`                  | `main` y `develop` | ⚡ Urgent patches. Highest priority             |
+
+
+# 🏷️ Naming Conventions
+
+## 🌿 Branch Naming
+
+### ✨ Feature Branches
+Used for new features or non-critical improvements.
+
+**Format:**
+`feature/[shortDescription]`
+
+**Examples:**
+- `feature/authenticationModule`
+- `feature/securityService`
+
+**Rules:**
+* 🧩 **Case:** strictly *camelCase* (lowercase with hyphens).
+* ✍️ **Descriptive:** Short and meaningful description.
+---
+
+### 📦 Release Branches
+Used for preparing a new production release. Follows [Semantic Versioning](https://semver.org/).
+
+**Format:**
+`release/v[major].[minor].[patch]`
+
+**Examples:**
+- `release/v1.0.0`
+- `release/v1.1.0-beta`
 
 ---
 
-## 🧼 Arquitectura Limpia - Organización de Capas
+### 🚑 Hotfix Branches
+Used for urgent fixes in the production environment.
 
-### 🧠 DOMAIN (Dominio)
+**Format:**
+`hotfix/[shortDescription]`
 
-Representa el **núcleo del negocio**, define **qué hace el sistema, no cómo lo hace**.
-Incluye entidades, objetos de valor, enumeraciones, interfaces de repositorio y servicios de negocio.
-
-### 🎯 APPLICATION (Aplicación)
-
-Orquesta la lógica del negocio a través de **casos de uso**, **DTOs**, **mappers** y **excepciones personalizadas**.
-
-### 🧩 INFRASTRUCTURE (Infraestructura)
-
-Implementa los **detalles técnicos**: controladores REST, persistencia, configuración, seguridad y conexión con servicios externos.
+**Examples:**
+- `hotfix/fixTokenExpiration`
+- `hotfix/securityPatch`
 
 ---
 
-## 📊 Diagramas del Módulo
+## 📝 Commit Message Guidelines
+
+We follow the **[Conventional Commits](https://www.conventionalcommits.org/)** specification.
+
+### 🧱 Standard Format
+
+```text
+<type>(<scope>): <short description>
+```
+
+# 📐 System Architecture & Design
+
+This section provides a visual representation of the module's architecture ilustrating the base diagrams to show the application structure and components flow.
 
 
-### 🌐 Diagrama de Contexto
-![Diagrama de Contexto](docs/diagramaContexto.png)
-
-### 🧩 Diagrama de Componentes Específico
-
-![Diagrama de Componentes](docs/diagramaComponentes.png)
-
----
-
-### 🎯 Diagrama de Casos de Uso
-![Diagrama de Casos de Uso](docs/diagramaCasosUso.png)
-
-### 🧬 Diagrama de Clases
-
-![Diagrama de Clases](docs/diagramaClases.jpg)
+### 🧩 Context Diagram
 
 ---
 
-### 🗄️ Diagrama de Bases de Datos
+![Context Diagram](./docs/diagramaContexto.png)
 
-![Diagrama de Datos](docs/diagramaDatos.jpg)
+### 🧩 Specific Components Diagram
+
+---
+This diagram visualizes the dependencies between classes for developing the module's logic. It includes the following components:
+
+* Controllers:
+    * Travel Management Controller: This controller receives and manages all requests related to travels, including references handled via DTOs.
+
+When applying a hexagonal architecture, before developing the use cases, we need adapter components:
+
+* Adapter:
+
+    * Travel Adapter: Contracts (interfaces) are defined based on the input received from the controllers.
+
+    * Mapper Adapter: This adapter transforms data types from one object to another for use in the respective use cases.
+
+* Use Cases:
+
+    * Create Travel Use Case: Implementation to create new travels.
+
+    * Modify Travel Use Case: Update data for an existing travel.
+
+    * Change State Travel Use Case: Change the travel status during its lifecycle.
+
+    * Get Travel Use Case: Retrieve information about a specific travel.
+
+    * Get All Travel Use Case: Retrieve a list of all travels.
+
+    * Get Passenger List Use Case: Retrieve the passenger list for a travel.
+
+    * Delete Travel Use Case: Delete a travel.
+
+* Ports: The following interfaces were defined as the data we will receive from the outside:
+
+    * Port Notifications
+
+    * Port Profiles
+
+    * Port Travel Information
+
+![Specific Components Diagram](./docs/diagramaComponentes.png)
+
+### 🧩 Use Cases Diagram
+
+---
+This diagram presents the main functionalities defined by each actor. This facilitates a better understanding when implementing the module's multiple functions, as well as identifying and separating each actor's roles when using the application.
+
+![Use Cases Diagram](./docs/diagramaCasosUso.png)
+
+### 🧩 Class Diagram
+
+---
+Based on the Specific Components diagram, we created the class diagram, where we defined an Observer design pattern that will notify all passengers already registered on the trip, allowing them to view information related to the travel.
+
+![Class Diagram](./docs/diagramaClases.jpg)
+
+### 🧩 Data Base Diagram
 
 ---
 
-### 🚀 Diagrama de Despliegue Específico del Módulo
+This diagram represents how the data is stored, where we will find the multiple documents, and the data that will be stored in an embedded or referenced manner.
+
+![Data Base Diagram](./docs/diagramaDatos.jpg)
 
 
-![Diagrama de Despliegue](docs/diagramaDespliegue.png)
+### 🧩 Specific Deploy Diagram
 
-### 🧪 Pruebas unitarias del controlador y cobertura de codigo
-<img width="1872" height="367" alt="image" src="https://github.com/user-attachments/assets/c56e6128-90db-4a93-936f-d0a7ebf91a6e" />
-<img width="1915" height="315" alt="image" src="https://github.com/user-attachments/assets/eb6e8f34-6613-411c-9167-6d68ba9cb146" />
+---
+This diagram illustrates the cloud deployment architecture and workflow of the travel management module.
+![Specific Deploy Diagram](./docs/diagramaDespliegue.png)
 
-### 🧪 pruebas unitarias del adaptador y cobertura del codigo
-<img width="1914" height="430" alt="image" src="https://github.com/user-attachments/assets/d34a1650-5b33-4770-a844-5718a848a70e" />
-<img width="1912" height="247" alt="image" src="https://github.com/user-attachments/assets/3f9635ca-5339-4a2f-87e7-d515ba2171c2" />
+# 🚀 Getting Started
+
+This section guides you through setting up the project locally. This project requires **Java 17**. If you have a different version, you can change it or we recommend using **Docker** to ensure compatibility before compiling.
+
+### Clone & open repository
+
+``` bash
+git clone https://github.com/RIDECI/NEMESIS_TRAVEL_MANAGEMENT_BACKEND.git
+```
+
+``` bash
+cd NEMESIS_TRAVEL_MANAGEMENT_BACKEND
+```
+
+You can open it in your favorite IDE.
+
+### Dockerize the project
+
+Dockerizing before compiling the project avoids configuration issues and ensures environment consistency.
+
+``` bash
+docker compose up -d
+```
+
+### Install dependencies & compile project
+
+Download dependencies and compile the source code.
+
+``` bash
+mvn clean install
+```
+
+``` bash
+mvn clean compile
+```
+
+### To run the project
+Start the Spring Boot server
+
+``` bash
+mvn spring-boot:run
+```
 
 
+# 🧪 Testing
+
+Testing is an essential part of the project functionality; this section will show the code coverage and code quality analyzed with tools like JaCoCo and SonarQube.
+
+
+### 📊 Code Coverage (JaCoCo)
+
+---
+![JaCoCo](./docs/jacoco.png)
+
+
+### 🔍 Static Analysis (SonarQube)
+![SonarQube](url.png)
