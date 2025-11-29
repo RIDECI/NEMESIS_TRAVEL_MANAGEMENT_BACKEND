@@ -9,4 +9,4 @@ ARG JAR_FILE=target/*.jar
 WORKDIR /app
 COPY --from=builder /app/${JAR_FILE} app.jar
 EXPOSE 8080
-ENTRYPOINT java -Dserver.port=$PORT -jar /app/app.jar
+ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT:-8080} -jar /app/app.jar"]
