@@ -35,17 +35,17 @@ public class TravelService implements CreateTravelUseCase, GetTravelUseCase, Del
     }
 
     @Override
-    public Travel getTravelById(Long id) {
+    public Travel getTravelById(String id) {
         return travelRepositoryPort.getTravelById(id);
     }
 
     @Override
-    public void deleteTravelById(Long id) {
+    public void deleteTravelById(String id) {
         travelRepositoryPort.deleteTravelById(id);
     }
 
     @Override
-    public Travel updateTravel(Long id, TravelRequest travel) {
+    public Travel updateTravel(String id, TravelRequest travel) {
         Travel travelToModify = travelMapper.toDomain(travel);
 
         return travelRepositoryPort.updateTravel(id, travelToModify);
@@ -59,14 +59,14 @@ public class TravelService implements CreateTravelUseCase, GetTravelUseCase, Del
     }
 
     @Override
-    public Travel changeStateTravel(Long id, Status status) {
+    public Travel changeStateTravel(String id, Status status) {
 
         return travelRepositoryPort.changeStateTravel(id, status);
 
     }
 
     @Override
-    public List<Long> getPassengerList(Long id, List<Long> passengersId) {
+    public List<Long> getPassengerList(String id, List<Long> passengersId) {
 
         return travelRepositoryPort.getPassengerList(id, passengersId);
 

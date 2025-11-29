@@ -66,7 +66,7 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     }
 
     @Override
-    public Travel getTravelById(Long id) {
+    public Travel getTravelById(String id) {
 
         TravelDocument travel = travelRepository.findById(id)
                 .orElseThrow(() -> new TravelNotFoundException("The travel with id: {id}, doesnt exists "));
@@ -76,14 +76,14 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     }
 
     @Override
-    public void deleteTravelById(Long id) {
+    public void deleteTravelById(String id) {
 
         travelRepository.deleteById(id);
 
     }
 
     @Override
-    public Travel updateTravel(Long id, Travel travel) {
+    public Travel updateTravel(String id, Travel travel) {
 
         TravelDocument actualTravel = travelRepository.findById(id)
                 .orElseThrow(() -> new TravelNotFoundException("Dont exist the travel with id: {id}"));
@@ -112,7 +112,7 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     }
 
     @Override
-    public Travel changeStateTravel(Long id, Status status) {
+    public Travel changeStateTravel(String id, Status status) {
 
         TravelDocument travelToModifyState = travelRepository.findById(id).orElseThrow(
                 () -> new TravelNotFoundException("The trip to change the state with id: {id} does not exist "));
@@ -134,7 +134,7 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     }
 
     @Override
-    public List<Long> getPassengerList(Long id, List<Long> passengerList) {
+    public List<Long> getPassengerList(String id, List<Long> passengerList) {
 
         TravelDocument travel = travelRepository.findById(id)
                 .orElseThrow(() -> new TravelNotFoundException("The travel with id: {id} not found "));

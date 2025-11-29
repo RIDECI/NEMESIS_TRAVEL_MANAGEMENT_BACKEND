@@ -58,7 +58,7 @@ public class TravelController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TravelResponse> updateTravel(
-            @Parameter(description = "ID del viaje a actualizar", required = true) @PathVariable Long id,
+            @Parameter(description = "ID del viaje a actualizar", required = true) @PathVariable String id,
             @Parameter(description = "Nuevos datos del viaje", required = true) @RequestBody TravelRequest travelRequest) {
 
         TravelResponse updated = travelMapper.toResponse(modifyTravelUseCase.updateTravel(id, travelRequest));
@@ -75,7 +75,7 @@ public class TravelController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TravelResponse> getTravelById(
-            @Parameter(description = "ID del viaje a buscar", required = true) @PathVariable Long id) {
+            @Parameter(description = "ID del viaje a buscar", required = true) @PathVariable String id) {
 
         TravelResponse travel = travelMapper.toResponse(getTravelUseCase.getTravelById(id));
         return ResponseEntity.ok(travel);
@@ -83,14 +83,14 @@ public class TravelController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTravelById(
-            @Parameter(description = "ID del viaje a eliminar", required = true) @PathVariable Long id) {
+            @Parameter(description = "ID del viaje a eliminar", required = true) @PathVariable String id) {
         deleteTravelUseCase.deleteTravelById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<TravelResponse> updateStatusTravel(
-            @Parameter(description = "ID del viaje", required = true) @PathVariable Long id,
+            @Parameter(description = "ID del viaje", required = true) @PathVariable String id,
             @Parameter(description = "Nuevo estado del viaje", required = true) @RequestBody Status status) {
 
         Travel travel = changeStateTravelUseCase.changeStateTravel(id, status);
@@ -100,7 +100,7 @@ public class TravelController {
 
     @GetMapping("/occupantList/{id}")
     public ResponseEntity<List<Long>> getOccupantList(
-            @PathVariable Long id, @RequestBody List<Long> passengersList) {
+            @PathVariable String id, @RequestBody List<Long> passengersList) {
 
         return ResponseEntity.ok(getPassengerListUseCase.getPassengerList(id, passengersList));
 

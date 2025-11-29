@@ -13,7 +13,7 @@ import lombok.Data;
 @Builder
 public class TravelResponse {
 
-    private Long id;
+    private String id;
 
     private Long organizerId;
 

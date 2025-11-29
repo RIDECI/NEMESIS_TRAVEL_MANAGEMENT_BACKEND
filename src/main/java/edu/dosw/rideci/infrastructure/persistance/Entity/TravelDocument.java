@@ -17,7 +17,7 @@ import lombok.Data;
 public class TravelDocument {
 
     @Id
-    private Long id;
+    private String id;
 
     private Long organizerId;
 

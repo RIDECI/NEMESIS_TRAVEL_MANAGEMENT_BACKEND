@@ -16,7 +16,7 @@ import lombok.Setter;
 @Builder
 public class TravelCompletedEvent {
 
-    private Long travelId;
+    private String travelId;
 
     private Long driverId;
 

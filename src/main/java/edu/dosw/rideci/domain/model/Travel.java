@@ -18,7 +18,7 @@ import lombok.Setter;
 @Builder
 public class Travel {
 
-    private Long id;
+    private String id;
 
     private Long organizerId;
 

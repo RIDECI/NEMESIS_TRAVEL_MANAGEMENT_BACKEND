@@ -19,7 +19,7 @@ import lombok.Setter;
 @Builder
 public class TravelCreatedEvent {
 
-    private Long travelId;
+    private String travelId;
 
     private Long organizerId;
 
