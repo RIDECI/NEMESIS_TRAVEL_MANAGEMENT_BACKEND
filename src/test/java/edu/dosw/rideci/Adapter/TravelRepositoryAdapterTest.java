@@ -56,7 +56,7 @@ class TravelRepositoryAdapterTest {
     @BeforeEach
     void setup() {
         travelDomain = Travel.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.ACTIVE)
@@ -70,7 +70,7 @@ class TravelRepositoryAdapterTest {
                 .build();
 
         travelDocument = TravelDocument.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.ACTIVE)
@@ -84,7 +84,7 @@ class TravelRepositoryAdapterTest {
                 .build();
 
         travelDocumentSaved = TravelDocument.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.ACTIVE)
@@ -110,7 +110,7 @@ class TravelRepositoryAdapterTest {
         Travel result = travelRepositoryAdapter.save(travelDomain);
 
         assertNotNull(result);
-        assertEquals(1L, result.getId());
+        assertEquals("550e8400-e29b-41d4-a716-446655440000", result.getId());
         assertEquals(10L, result.getDriverId());
         assertEquals(Status.ACTIVE, result.getStatus());
         assertEquals(3, result.getAvailableSlots());
@@ -122,16 +122,16 @@ class TravelRepositoryAdapterTest {
     @DisplayName("Should retrieve a travel by ID")
     @Test
     void shouldGetTravelByIdSuccessfully() {
-        when(travelRepository.findById(1L)).thenReturn(Optional.of(travelDocument));
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
         when(travelMapper.toDomain(any(TravelDocument.class))).thenReturn(travelDomain);
 
-        Travel result = travelRepositoryAdapter.getTravelById(1L);
+        Travel result = travelRepositoryAdapter.getTravelById("550e8400-e29b-41d4-a716-446655440000");
 
         assertNotNull(result);
-        assertEquals(1L, result.getId());
+        assertEquals("550e8400-e29b-41d4-a716-446655440000", result.getId());
         assertEquals(10L, result.getDriverId());
 
-        verify(travelRepository, times(1)).findById(1L);
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
         verify(travelMapper, times(1)).toDomain(any(TravelDocument.class));
     }
 
@@ -139,28 +139,28 @@ class TravelRepositoryAdapterTest {
     @Test
     void shouldThrowExceptionWhenTravelNotFound() {
 
-        when(travelRepository.findById(999L)).thenReturn(Optional.empty());
+        when(travelRepository.findById("non-existent-id")).thenReturn(Optional.empty());
 
         assertThrows(TravelNotFoundException.class, () -> {
-            travelRepositoryAdapter.getTravelById(999L);
+            travelRepositoryAdapter.getTravelById("non-existent-id");
         });
 
-        verify(travelRepository, times(1)).findById(999L);
+        verify(travelRepository, times(1)).findById("non-existent-id");
     }
 
     @DisplayName("Should delete a travel by ID")
     @Test
     void shouldDeleteTravelByIdSuccessfully() {
-        travelRepositoryAdapter.deleteTravelById(1L);
+        travelRepositoryAdapter.deleteTravelById("550e8400-e29b-41d4-a716-446655440000");
 
-        verify(travelRepository, times(1)).deleteById(1L);
+        verify(travelRepository, times(1)).deleteById("550e8400-e29b-41d4-a716-446655440000");
     }
 
     @DisplayName("Should update a travel successfully")
     @Test
     void shouldUpdateTravelSuccessfully() {
         Travel updatedTravel = Travel.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(5)
                 .status(Status.ACTIVE)
@@ -174,7 +174,7 @@ class TravelRepositoryAdapterTest {
                 .build();
 
         TravelDocument updatedDocument = TravelDocument.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(5)
                 .status(Status.ACTIVE)
@@ -187,33 +187,33 @@ class TravelRepositoryAdapterTest {
                 .destiny(null)
                 .build();
 
-        when(travelRepository.findById(1L)).thenReturn(Optional.of(travelDocument));
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
         when(travelRepository.save(any(TravelDocument.class))).thenReturn(updatedDocument);
         when(travelMapper.toLocationEmbeddable(null)).thenReturn(null);
         when(travelMapper.toDomain(any(TravelDocument.class))).thenReturn(updatedTravel);
 
-        Travel result = travelRepositoryAdapter.updateTravel(1L, updatedTravel);
+        Travel result = travelRepositoryAdapter.updateTravel("550e8400-e29b-41d4-a716-446655440000", updatedTravel);
 
         assertNotNull(result);
-        assertEquals(1L, result.getId());
+        assertEquals("550e8400-e29b-41d4-a716-446655440000", result.getId());
         assertEquals(5, result.getAvailableSlots());
         assertEquals(25.0, result.getEstimatedCost());
         assertEquals("No smoking allowed", result.getConditions());
 
-        verify(travelRepository, times(1)).findById(1L);
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
         verify(travelRepository, times(1)).save(any(TravelDocument.class));
     }
 
     @DisplayName("Should throw TravelNotFoundException when updating non-existent travel")
     @Test
     void shouldThrowExceptionWhenUpdatingNonExistentTravel() {
-        when(travelRepository.findById(999L)).thenReturn(Optional.empty());
+        when(travelRepository.findById("non-existent-id")).thenReturn(Optional.empty());
 
         assertThrows(TravelNotFoundException.class, () -> {
-            travelRepositoryAdapter.updateTravel(999L, travelDomain);
+            travelRepositoryAdapter.updateTravel("non-existent-id", travelDomain);
         });
 
-        verify(travelRepository, times(1)).findById(999L);
+        verify(travelRepository, times(1)).findById("non-existent-id");
         verify(travelRepository, never()).save(any(TravelDocument.class));
     }
 
@@ -230,7 +230,7 @@ class TravelRepositoryAdapterTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getId());
+        assertEquals("550e8400-e29b-41d4-a716-446655440000", result.get(0).getId());
 
         verify(travelRepository, times(1)).findAll();
         verify(travelMapper, times(1)).toListDomain(travelDocumentList);
@@ -240,7 +240,7 @@ class TravelRepositoryAdapterTest {
     @Test
     void shouldChangeStateTravelToCompletedSuccessfully() {
         Travel completedTravel = Travel.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.COMPLETED)
@@ -254,7 +254,7 @@ class TravelRepositoryAdapterTest {
                 .build();
 
         TravelDocument completedDocument = TravelDocument.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.COMPLETED)
@@ -267,16 +267,17 @@ class TravelRepositoryAdapterTest {
                 .destiny(null)
                 .build();
 
-        when(travelRepository.findById(1L)).thenReturn(Optional.of(travelDocument));
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
         when(travelRepository.save(any(TravelDocument.class))).thenReturn(completedDocument);
         when(travelMapper.toDomain(any(TravelDocument.class))).thenReturn(completedTravel);
 
-        Travel result = travelRepositoryAdapter.changeStateTravel(1L, Status.COMPLETED);
+        Travel result = travelRepositoryAdapter.changeStateTravel("550e8400-e29b-41d4-a716-446655440000",
+                Status.COMPLETED);
 
         assertNotNull(result);
         assertEquals(Status.COMPLETED, result.getStatus());
 
-        verify(travelRepository, times(1)).findById(1L);
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
         verify(travelRepository, times(1)).save(any(TravelDocument.class));
         verify(eventPublisher, times(1)).publish(any(TravelCompletedEvent.class), eq("travel.completed"));
     }
@@ -285,7 +286,7 @@ class TravelRepositoryAdapterTest {
     @Test
     void shouldChangeStateTravelToCancelledSuccessfully() {
         Travel cancelledTravel = Travel.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.CANCELLED)
@@ -299,7 +300,7 @@ class TravelRepositoryAdapterTest {
                 .build();
 
         TravelDocument cancelledDocument = TravelDocument.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.CANCELLED)
@@ -312,16 +313,17 @@ class TravelRepositoryAdapterTest {
                 .destiny(null)
                 .build();
 
-        when(travelRepository.findById(1L)).thenReturn(Optional.of(travelDocument));
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
         when(travelRepository.save(any(TravelDocument.class))).thenReturn(cancelledDocument);
         when(travelMapper.toDomain(any(TravelDocument.class))).thenReturn(cancelledTravel);
 
-        Travel result = travelRepositoryAdapter.changeStateTravel(1L, Status.CANCELLED);
+        Travel result = travelRepositoryAdapter.changeStateTravel("550e8400-e29b-41d4-a716-446655440000",
+                Status.CANCELLED);
 
         assertNotNull(result);
         assertEquals(Status.CANCELLED, result.getStatus());
 
-        verify(travelRepository, times(1)).findById(1L);
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
         verify(travelRepository, times(1)).save(any(TravelDocument.class));
         verify(eventPublisher, never()).publish(any(TravelCompletedEvent.class), eq("travel.completed"));
     }
@@ -329,13 +331,13 @@ class TravelRepositoryAdapterTest {
     @DisplayName("Should throw TravelNotFoundException when changing state of non-existent travel")
     @Test
     void shouldThrowExceptionWhenChangingStateOfNonExistentTravel() {
-        when(travelRepository.findById(999L)).thenReturn(Optional.empty());
+        when(travelRepository.findById("non-existent-id")).thenReturn(Optional.empty());
 
         assertThrows(TravelNotFoundException.class, () -> {
-            travelRepositoryAdapter.changeStateTravel(999L, Status.COMPLETED);
+            travelRepositoryAdapter.changeStateTravel("non-existent-id", Status.COMPLETED);
         });
 
-        verify(travelRepository, times(1)).findById(999L);
+        verify(travelRepository, times(1)).findById("non-existent-id");
         verify(travelRepository, never()).save(any(TravelDocument.class));
     }
 }

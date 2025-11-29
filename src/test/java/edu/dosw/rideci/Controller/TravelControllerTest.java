@@ -98,7 +98,7 @@ class TravelControllerTest {
                                 .build();
 
                 travelResponse = TravelResponse.builder()
-                                .id(1L)
+                                .id("550e8400-e29b-41d4-a716-446655440000")
                                 .driverId(10L)
                                 .availableSlots(3)
                                 .estimatedCost(20.5)
@@ -110,7 +110,7 @@ class TravelControllerTest {
                                 .build();
 
                 travelDomain = Travel.builder()
-                                .id(1L)
+                                .id("550e8400-e29b-41d4-a716-446655440000")
                                 .driverId(10L)
                                 .availableSlots(3)
                                 .status(Status.ACTIVE)
@@ -124,7 +124,7 @@ class TravelControllerTest {
                                 .build();
 
                 travelDomainUpdated = Travel.builder()
-                                .id(1L)
+                                .id("550e8400-e29b-41d4-a716-446655440000")
                                 .driverId(10L)
                                 .availableSlots(5)
                                 .status(Status.ACTIVE)
@@ -150,7 +150,7 @@ class TravelControllerTest {
                                 .content(objectMapper.writeValueAsString(travelRequest)))
                                 .andExpect(status().isCreated())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.id").value(1L))
+                                .andExpect(jsonPath("$.id").value("550e8400-e29b-41d4-a716-446655440000"))
                                 .andExpect(jsonPath("$.driverId").value(10L))
                                 .andExpect(jsonPath("$.availableSlots").value(3))
                                 .andExpect(jsonPath("$.estimatedCost").value(20.5))
@@ -163,53 +163,54 @@ class TravelControllerTest {
         @Test
         void shouldUpdateTravelSuccessfully() throws Exception {
                 when(travelMapper.toDomain(any(TravelRequest.class))).thenReturn(travelDomainUpdated);
-                when(modifyTravelUseCase.updateTravel(eq(1L), any(TravelRequest.class)))
+                when(modifyTravelUseCase.updateTravel(eq("550e8400-e29b-41d4-a716-446655440000"),
+                                any(TravelRequest.class)))
                                 .thenReturn(travelDomainUpdated);
                 when(travelMapper.toResponse(any(Travel.class))).thenReturn(travelResponse);
 
-                mockMvc.perform(put("/travels/{id}", 1L)
+                mockMvc.perform(put("/travels/{id}", "550e8400-e29b-41d4-a716-446655440000")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(travelRequest)))
                                 .andExpect(status().isOk())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.id").value(1L))
+                                .andExpect(jsonPath("$.id").value("550e8400-e29b-41d4-a716-446655440000"))
                                 .andExpect(jsonPath("$.driverId").value(10L))
                                 .andExpect(jsonPath("$.availableSlots").value(3))
                                 .andExpect(jsonPath("$.estimatedCost").value(20.5))
                                 .andExpect(jsonPath("$.conditions").value("No smoking"));
 
                 verify(modifyTravelUseCase, times(1))
-                                .updateTravel(eq(1L), any(TravelRequest.class));
+                                .updateTravel(eq("550e8400-e29b-41d4-a716-446655440000"), any(TravelRequest.class));
         }
 
         @DisplayName("Should delete a travel")
         @Test
         void shouldDeleteTravelSuccessfully() throws Exception {
-                doNothing().when(deleteTravelUseCase).deleteTravelById(1L);
+                doNothing().when(deleteTravelUseCase).deleteTravelById("550e8400-e29b-41d4-a716-446655440000");
 
-                mockMvc.perform(delete("/travels/{id}", 1L))
+                mockMvc.perform(delete("/travels/{id}", "550e8400-e29b-41d4-a716-446655440000"))
                                 .andExpect(status().isNoContent());
 
-                verify(deleteTravelUseCase, times(1)).deleteTravelById(1L);
+                verify(deleteTravelUseCase, times(1)).deleteTravelById("550e8400-e29b-41d4-a716-446655440000");
         }
 
         @DisplayName("Should get a travel by ID")
         @Test
         void shouldGetTravelByIdSuccessfully() throws Exception {
-                when(getTravelUseCase.getTravelById(1L)).thenReturn(travelDomain);
+                when(getTravelUseCase.getTravelById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(travelDomain);
                 when(travelMapper.toResponse(any(Travel.class))).thenReturn(travelResponse);
 
-                mockMvc.perform(get("/travels/{id}", 1L)
+                mockMvc.perform(get("/travels/{id}", "550e8400-e29b-41d4-a716-446655440000")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.id").value(1L))
+                                .andExpect(jsonPath("$.id").value("550e8400-e29b-41d4-a716-446655440000"))
                                 .andExpect(jsonPath("$.driverId").value(10L))
                                 .andExpect(jsonPath("$.availableSlots").value(3))
                                 .andExpect(jsonPath("$.estimatedCost").value(20.5))
                                 .andExpect(jsonPath("$.conditions").value("No smoking"));
 
-                verify(getTravelUseCase, times(1)).getTravelById(1L);
+                verify(getTravelUseCase, times(1)).getTravelById("550e8400-e29b-41d4-a716-446655440000");
         }
 
         @DisplayName("Should get all travels")
@@ -225,7 +226,7 @@ class TravelControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$[0].id").value(1L))
+                                .andExpect(jsonPath("$[0].id").value("550e8400-e29b-41d4-a716-446655440000"))
                                 .andExpect(jsonPath("$[0].driverId").value(10L))
                                 .andExpect(jsonPath("$[0].availableSlots").value(3))
                                 .andExpect(jsonPath("$[0].estimatedCost").value(20.5))
@@ -238,7 +239,7 @@ class TravelControllerTest {
         @Test
         void shouldUpdateTravelStatusSuccessfully() throws Exception {
                 Travel travelWithCancelledStatus = Travel.builder()
-                                .id(1L)
+                                .id("550e8400-e29b-41d4-a716-446655440000")
                                 .driverId(10L)
                                 .availableSlots(3)
                                 .status(Status.CANCELLED)
@@ -252,7 +253,7 @@ class TravelControllerTest {
                                 .build();
 
                 TravelResponse cancelledResponse = TravelResponse.builder()
-                                .id(1L)
+                                .id("550e8400-e29b-41d4-a716-446655440000")
                                 .driverId(10L)
                                 .availableSlots(3)
                                 .estimatedCost(20.5)
@@ -263,21 +264,22 @@ class TravelControllerTest {
                                 .destiny(null)
                                 .build();
 
-                when(changeStateTravelUseCase.changeStateTravel(1L, Status.CANCELLED))
+                when(changeStateTravelUseCase.changeStateTravel("550e8400-e29b-41d4-a716-446655440000",
+                                Status.CANCELLED))
                                 .thenReturn(travelWithCancelledStatus);
                 when(travelMapper.toResponse(any(Travel.class))).thenReturn(cancelledResponse);
 
-                mockMvc.perform(patch("/travels/{id}", 1L)
+                mockMvc.perform(patch("/travels/{id}", "550e8400-e29b-41d4-a716-446655440000")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(Status.CANCELLED)))
                                 .andExpect(status().isOk())
                                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.id").value(1L))
+                                .andExpect(jsonPath("$.id").value("550e8400-e29b-41d4-a716-446655440000"))
                                 .andExpect(jsonPath("$.driverId").value(10L))
                                 .andExpect(jsonPath("$.availableSlots").value(3))
                                 .andExpect(jsonPath("$.estimatedCost").value(20.5));
 
                 verify(changeStateTravelUseCase, times(1))
-                                .changeStateTravel(1L, Status.CANCELLED);
+                                .changeStateTravel("550e8400-e29b-41d4-a716-446655440000", Status.CANCELLED);
         }
 }
