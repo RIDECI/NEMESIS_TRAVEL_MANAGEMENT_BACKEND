@@ -99,8 +99,8 @@ public class TravelController {
     }
 
     @GetMapping("/occupantList/{id}")
-    public ResponseEntity<List<Long>> getOccupantList(
-            @PathVariable String id, @RequestBody List<Long> passengersList) {
+    public ResponseEntity<List<String>> getOccupantList(
+            @PathVariable String id, @RequestBody List<String> passengersList) {
 
         return ResponseEntity.ok(getPassengerListUseCase.getPassengerList(id, passengersList));
 

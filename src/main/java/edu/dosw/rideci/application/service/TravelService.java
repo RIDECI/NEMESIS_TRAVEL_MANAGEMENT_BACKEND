@@ -66,7 +66,7 @@ public class TravelService implements CreateTravelUseCase, GetTravelUseCase, Del
     }
 
     @Override
-    public List<Long> getPassengerList(String id, List<Long> passengersId) {
+    public List<String> getPassengerList(String id, List<String> passengersId) {
 
         return travelRepositoryPort.getPassengerList(id, passengersId);
 

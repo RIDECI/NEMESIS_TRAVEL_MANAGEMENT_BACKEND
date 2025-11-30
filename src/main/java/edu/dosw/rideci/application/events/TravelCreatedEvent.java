@@ -21,9 +21,9 @@ public class TravelCreatedEvent {
 
     private String travelId;
 
-    private Long organizerId;
+    private String organizerId;
 
-    private Long driverId;
+    private String driverId;
 
     private int availableSlots;
 
@@ -35,7 +35,7 @@ public class TravelCreatedEvent {
 
     private LocalDateTime departureDateAndTime;
 
-    private List<Long> passengersId;
+    private List<String> passengersId;
 
     private String conditions;
 

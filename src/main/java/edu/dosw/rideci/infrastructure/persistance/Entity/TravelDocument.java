@@ -19,9 +19,9 @@ public class TravelDocument {
     @Id
     private String id;
 
-    private Long organizerId;
+    private String organizerId;
 
-    private Long driverId;
+    private String driverId;
 
     private int availableSlots;
 
@@ -33,7 +33,7 @@ public class TravelDocument {
 
     private LocalDateTime departureDateAndTime;
 
-    private List<Long> passengersId;
+    private List<String> passengersId;
 
     private String conditions;
 

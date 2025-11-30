@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface GetPassengerListUseCase {
 
-    List<Long> getPassengerList(String id, List<Long> passengersId);
+    List<String> getPassengerList(String id, List<String> passengersId);
 
 }

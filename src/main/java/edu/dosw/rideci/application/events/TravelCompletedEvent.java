@@ -18,9 +18,9 @@ public class TravelCompletedEvent {
 
     private String travelId;
 
-    private Long driverId;
+    private String driverId;
 
-    private List<Long> passengerList;
+    private List<String> passengerList;
 
     private Status state;
 

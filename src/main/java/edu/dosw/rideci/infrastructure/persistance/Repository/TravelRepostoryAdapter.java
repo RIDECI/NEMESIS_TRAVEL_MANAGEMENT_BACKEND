@@ -134,7 +134,7 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     }
 
     @Override
-    public List<Long> getPassengerList(String id, List<Long> passengerList) {
+    public List<String> getPassengerList(String id, List<String> passengerList) {
 
         TravelDocument travel = travelRepository.findById(id)
                 .orElseThrow(() -> new TravelNotFoundException("The travel with id: {id} not found "));
