@@ -73,6 +73,9 @@ class TravelControllerTest {
         private edu.dosw.rideci.application.port.in.GetPassengerListUseCase getPassengerListUseCase;
 
         @MockitoBean
+        private edu.dosw.rideci.application.port.in.GetAllTravelByDriverIdUseCase getAllTravelByDriverIdUseCase;
+
+        @MockitoBean
         private TravelMapperInitial travelMapper;
 
         private TravelRequest travelRequest;

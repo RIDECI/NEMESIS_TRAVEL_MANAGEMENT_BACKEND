@@ -8,6 +8,6 @@ import edu.dosw.rideci.infrastructure.persistance.Entity.TravelDocument;
 
 public interface TravelRepository extends MongoRepository<TravelDocument, String> {
 
-    List<TravelDocument> findAllByTravelId(String travelId);
+    List<TravelDocument> findAllByDriverId(String driverId);
 
 }

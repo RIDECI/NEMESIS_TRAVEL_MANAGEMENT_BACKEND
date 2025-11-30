@@ -21,6 +21,6 @@ public interface TravelRepositoryPort {
 
     List<String> getPassengerList(String id, List<String> passengersId);
 
-    List<Travel> getAllTravelByDriverId(String id);
+    List<Travel> getAllTravelsByDriverId(String driverId);
 
 }

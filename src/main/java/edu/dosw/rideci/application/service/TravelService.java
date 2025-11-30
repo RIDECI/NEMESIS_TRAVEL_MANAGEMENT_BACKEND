@@ -76,7 +76,7 @@ public class TravelService implements CreateTravelUseCase, GetTravelUseCase, Del
     @Override
     public List<Travel> getAllTravelsByDriverId(String driverId) {
 
-        return travelRepositoryPort.getAllTravelByDriverId(driverId);
+        return travelRepositoryPort.getAllTravelsByDriverId(driverId);
 
     }
 
