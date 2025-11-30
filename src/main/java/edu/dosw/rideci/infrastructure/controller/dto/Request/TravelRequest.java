@@ -14,9 +14,9 @@ public class TravelRequest {
 
     private String id;
 
-    private Long organizerId;
+    private String organizerId;
 
-    private Long driverId;
+    private String driverId;
 
     private int availableSlots;
 
@@ -28,7 +28,7 @@ public class TravelRequest {
 
     private LocalDateTime departureDateAndTime;
 
-    private List<Long> passengersId;
+    private List<String> passengersId;
 
     private String conditions;
 
