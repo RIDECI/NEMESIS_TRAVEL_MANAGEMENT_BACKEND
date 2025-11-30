@@ -21,6 +21,7 @@ import edu.dosw.rideci.application.mapper.TravelMapperInitial;
 import edu.dosw.rideci.application.port.in.ChangeStateTravelUseCase;
 import edu.dosw.rideci.application.port.in.CreateTravelUseCase;
 import edu.dosw.rideci.application.port.in.DeleteTravelUseCase;
+import edu.dosw.rideci.application.port.in.GetAllTravelByDriverIdUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelUseCase;
 import edu.dosw.rideci.application.port.in.GetPassengerListUseCase;
 import edu.dosw.rideci.application.port.in.GetTravelUseCase;
@@ -44,6 +45,7 @@ public class TravelController {
     private final GetAllTravelUseCase getAllTravelUseCase;
     private final ChangeStateTravelUseCase changeStateTravelUseCase;
     private final GetPassengerListUseCase getPassengerListUseCase;
+    private final GetAllTravelByDriverIdUseCase getAllTravelByDriverIdUseCase;
     private final TravelMapperInitial travelMapper;
 
     @PostMapping("")
@@ -104,6 +106,14 @@ public class TravelController {
 
         return ResponseEntity.ok(getPassengerListUseCase.getPassengerList(id, passengersList));
 
+    }
+
+    @GetMapping("/driver/{driverId}")
+    public ResponseEntity<List<TravelResponse>> getAllTravelsByDriverId(
+            @PathVariable String driverId) {
+        List<Travel> allTravels = getAllTravelByDriverIdUseCase.getAllTravelsByDriverId(driverId);
+
+        return ResponseEntity.ok(travelMapper.toListResponse(allTravels));
     }
 
 }

@@ -149,4 +149,13 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
 
     }
 
+    @Override
+    public List<Travel> getAllTravelByDriverId(String driverId) {
+
+        List<TravelDocument> allTravelByDriver = travelRepository.findAllByTravelId(driverId);
+
+        return travelMapper.toListDomain(allTravelByDriver);
+
+    }
+
 }

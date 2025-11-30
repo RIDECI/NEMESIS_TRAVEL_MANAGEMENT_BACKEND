@@ -8,6 +8,7 @@ import edu.dosw.rideci.application.mapper.TravelMapperInitial;
 import edu.dosw.rideci.application.port.in.ChangeStateTravelUseCase;
 import edu.dosw.rideci.application.port.in.CreateTravelUseCase;
 import edu.dosw.rideci.application.port.in.DeleteTravelUseCase;
+import edu.dosw.rideci.application.port.in.GetAllTravelByDriverIdUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelUseCase;
 import edu.dosw.rideci.application.port.in.GetPassengerListUseCase;
 import edu.dosw.rideci.application.port.in.GetTravelUseCase;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TravelService implements CreateTravelUseCase, GetTravelUseCase, DeleteTravelUseCase, ModifyTravelUseCase,
-        GetAllTravelUseCase, ChangeStateTravelUseCase, GetPassengerListUseCase {
+        GetAllTravelUseCase, ChangeStateTravelUseCase, GetPassengerListUseCase, GetAllTravelByDriverIdUseCase {
 
     private final TravelRepositoryPort travelRepositoryPort;
     private final TravelMapperInitial travelMapper;
@@ -69,6 +70,13 @@ public class TravelService implements CreateTravelUseCase, GetTravelUseCase, Del
     public List<String> getPassengerList(String id, List<String> passengersId) {
 
         return travelRepositoryPort.getPassengerList(id, passengersId);
+
+    }
+
+    @Override
+    public List<Travel> getAllTravelsByDriverId(String driverId) {
+
+        return travelRepositoryPort.getAllTravelByDriverId(driverId);
 
     }
 
