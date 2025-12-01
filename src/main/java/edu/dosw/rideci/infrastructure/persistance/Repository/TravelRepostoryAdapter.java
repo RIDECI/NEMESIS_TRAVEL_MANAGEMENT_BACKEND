@@ -124,6 +124,8 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         if (status.equals(Status.COMPLETED)) {
             TravelCompletedEvent completedEvent = TravelCompletedEvent.builder()
                     .travelId(travelToModifyState.getId())
+                    .driverId(travelToModifyState.getDriverId())
+                    .passengerList(travelToModifyState.getPassengersId())
                     .state(travelToModifyState.getStatus())
                     .build();
             eventPublisher.publish(completedEvent, "travel.completed");
