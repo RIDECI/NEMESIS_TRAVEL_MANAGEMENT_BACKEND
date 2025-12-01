@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import edu.dosw.rideci.application.events.TravelCompletedEvent;
 import edu.dosw.rideci.application.events.TravelCreatedEvent;
+import edu.dosw.rideci.application.events.TravelUpdatedEvent;
 import edu.dosw.rideci.application.port.out.EventPublisher;
 import edu.dosw.rideci.application.port.out.TravelRepositoryPort;
 import edu.dosw.rideci.domain.model.Travel;
@@ -95,6 +96,17 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         actualTravel.setConditions(travel.getConditions());
         actualTravel.setOrigin(travelMapper.toLocationEmbeddable(travel.getOrigin()));
         actualTravel.setDestiny(travelMapper.toLocationEmbeddable(travel.getDestiny()));
+
+        TravelUpdatedEvent travelUpdatedEvent = TravelUpdatedEvent.builder()
+                .travelId(id)
+                .availableSlots(actualTravel.getAvailableSlots())
+                .estimatedCost(actualTravel.getEstimatedCost())
+                .departureDateAndTime(actualTravel.getDepartureDateAndTime())
+                .origin(travelMapper.toLocationDomain(actualTravel.getOrigin()))
+                .destiny(travelMapper.toLocationDomain(actualTravel.getDestiny()))
+                .build();
+
+        eventPublisher.publish(travelUpdatedEvent, "travel.updated");
 
         TravelDocument travelUpdated = travelRepository.save(actualTravel);
 

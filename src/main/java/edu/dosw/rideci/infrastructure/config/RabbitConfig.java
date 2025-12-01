@@ -23,6 +23,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue travelUpdatedQueue() {
+        return new Queue("travel.updated.queue", true);
+    }
+
+    @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
@@ -40,6 +45,11 @@ public class RabbitConfig {
     @Bean
     public Binding bindingTravelCompleted() {
         return BindingBuilder.bind(travelCompletedQueue()).to(travelExchange()).with("travel.completed");
+    }
+
+    @Bean
+    public Binding bindingTravelUpdated() {
+        return BindingBuilder.bind(travelUpdatedQueue()).to(travelExchange()).with("travel.updated");
     }
 
     // Microservicio de Perfiles -> Consumer
