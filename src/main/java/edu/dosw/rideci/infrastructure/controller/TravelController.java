@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 import edu.dosw.rideci.application.mapper.TravelMapperInitial;
 import edu.dosw.rideci.application.port.in.ChangeStateTravelUseCase;
 import edu.dosw.rideci.application.port.in.CreateTravelUseCase;
@@ -30,6 +27,8 @@ import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
 import edu.dosw.rideci.infrastructure.controller.dto.Response.TravelResponse;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -101,8 +100,8 @@ public class TravelController {
     }
 
     @GetMapping("/occupantList/{id}")
-    public ResponseEntity<List<String>> getOccupantList(
-            @PathVariable String id, @RequestBody List<String> passengersList) {
+    public ResponseEntity<List<Long>> getOccupantList(
+            @PathVariable String id, @RequestBody List<Long> passengersList) {
 
         return ResponseEntity.ok(getPassengerListUseCase.getPassengerList(id, passengersList));
 
@@ -110,7 +109,7 @@ public class TravelController {
 
     @GetMapping("/driver/{driverId}")
     public ResponseEntity<List<TravelResponse>> getAllTravelsByDriverId(
-            @PathVariable String driverId) {
+            @PathVariable Long driverId) {
         List<Travel> allTravels = getAllTravelByDriverIdUseCase.getAllTravelsByDriverId(driverId);
 
         return ResponseEntity.ok(travelMapper.toListResponse(allTravels));

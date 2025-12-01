@@ -5,18 +5,22 @@ import java.util.List;
 
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.domain.model.enums.TravelType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TravelRequest {
 
     private String id;
 
-    private String organizerId;
+    private Long organizerId;
 
-    private String driverId;
+    private Long driverId;
 
     private int availableSlots;
 
@@ -28,7 +32,7 @@ public class TravelRequest {
 
     private LocalDateTime departureDateAndTime;
 
-    private List<String> passengersId;
+    private List<Long> passengersId;
 
     private String conditions;
 

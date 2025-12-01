@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.dosw.rideci.infrastructure.controller.TravelController;
 import edu.dosw.rideci.application.mapper.TravelMapperInitial;
 import edu.dosw.rideci.application.port.in.ChangeStateTravelUseCase;
 import edu.dosw.rideci.application.port.in.CreateTravelUseCase;
@@ -39,6 +38,7 @@ import edu.dosw.rideci.application.port.in.ModifyTravelUseCase;
 import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.domain.model.enums.TravelType;
+import edu.dosw.rideci.infrastructure.controller.TravelController;
 import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
 import edu.dosw.rideci.infrastructure.controller.dto.Response.TravelResponse;
 
@@ -88,12 +88,12 @@ class TravelControllerTest {
         @BeforeEach
         void setup() {
                 travelRequest = TravelRequest.builder()
-                                .driverId("10")
+                                .driverId(10L)
                                 .availableSlots(3)
                                 .status(Status.ACTIVE)
                                 .estimatedCost(20.5)
                                 .departureDateAndTime(departureDate)
-                                .passengersId(List.of("2", "3"))
+                                .passengersId(List.of(2L, 3L))
                                 .travelType(TravelType.TRIP)
                                 .conditions("No smoking")
                                 .origin(null)
@@ -102,11 +102,11 @@ class TravelControllerTest {
 
                 travelResponse = TravelResponse.builder()
                                 .id("550e8400-e29b-41d4-a716-446655440000")
-                                .driverId("10")
+                                .driverId(10L)
                                 .availableSlots(3)
                                 .estimatedCost(20.5)
                                 .departureDateAndTime(departureDate)
-                                .passengersId(List.of("2", "3"))
+                                .passengersId(List.of(2L, 3L))
                                 .conditions("No smoking")
                                 .origin(null)
                                 .destiny(null)
@@ -114,12 +114,12 @@ class TravelControllerTest {
 
                 travelDomain = Travel.builder()
                                 .id("550e8400-e29b-41d4-a716-446655440000")
-                                .driverId("10")
+                                .driverId(10L)
                                 .availableSlots(3)
                                 .status(Status.ACTIVE)
                                 .estimatedCost(20.5)
                                 .departureDateAndTime(departureDate)
-                                .passengersId(List.of("2", "3"))
+                                .passengersId(List.of(2L, 3L))
                                 .travelType(TravelType.TRIP)
                                 .conditions("No smoking")
                                 .origin(null)
@@ -128,12 +128,12 @@ class TravelControllerTest {
 
                 travelDomainUpdated = Travel.builder()
                                 .id("550e8400-e29b-41d4-a716-446655440000")
-                                .driverId("10")
+                                .driverId(10L)
                                 .availableSlots(5)
                                 .status(Status.ACTIVE)
                                 .estimatedCost(25.0)
                                 .departureDateAndTime(departureDate)
-                                .passengersId(List.of("2", "3", "4"))
+                                .passengersId(List.of(2L, 3L, 4L))
                                 .travelType(TravelType.TRIP)
                                 .conditions("No smoking allowed")
                                 .origin(null)
@@ -243,12 +243,12 @@ class TravelControllerTest {
         void shouldUpdateTravelStatusSuccessfully() throws Exception {
                 Travel travelWithCancelledStatus = Travel.builder()
                                 .id("550e8400-e29b-41d4-a716-446655440000")
-                                .driverId("10")
+                                .driverId(10L)
                                 .availableSlots(3)
                                 .status(Status.CANCELLED)
                                 .estimatedCost(20.5)
                                 .departureDateAndTime(departureDate)
-                                .passengersId(List.of("2", "3"))
+                                .passengersId(List.of(2L, 3L))
                                 .travelType(TravelType.TRIP)
                                 .conditions("No smoking")
                                 .origin(null)
@@ -257,11 +257,11 @@ class TravelControllerTest {
 
                 TravelResponse cancelledResponse = TravelResponse.builder()
                                 .id("550e8400-e29b-41d4-a716-446655440000")
-                                .driverId("10")
+                                .driverId(10L)
                                 .availableSlots(3)
                                 .estimatedCost(20.5)
                                 .departureDateAndTime(departureDate)
-                                .passengersId(List.of("2", "3"))
+                                .passengersId(List.of(2L, 3L))
                                 .conditions("No smoking")
                                 .origin(null)
                                 .destiny(null)

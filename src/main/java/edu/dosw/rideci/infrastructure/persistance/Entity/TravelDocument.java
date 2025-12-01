@@ -8,20 +8,24 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.domain.model.enums.TravelType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Document(collection = "travel")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TravelDocument {
 
     @Id
     private String id;
 
-    private String organizerId;
+    private Long organizerId;
 
-    private String driverId;
+    private Long driverId;
 
     private int availableSlots;
 
@@ -33,7 +37,7 @@ public class TravelDocument {
 
     private LocalDateTime departureDateAndTime;
 
-    private List<String> passengersId;
+    private List<Long> passengersId;
 
     private String conditions;
 

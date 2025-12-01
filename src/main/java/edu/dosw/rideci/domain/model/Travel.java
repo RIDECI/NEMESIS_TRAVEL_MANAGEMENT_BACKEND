@@ -20,9 +20,9 @@ public class Travel {
 
     private String id;
 
-    private String organizerId;
+    private Long organizerId;
 
-    private String driverId;
+    private Long driverId;
 
     private int availableSlots;
 
@@ -34,7 +34,7 @@ public class Travel {
 
     private LocalDateTime departureDateAndTime;
 
-    private List<String> passengersId;
+    private List<Long> passengersId;
 
     private String conditions;
 

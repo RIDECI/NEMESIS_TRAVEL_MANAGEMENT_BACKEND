@@ -1,24 +1,24 @@
 package edu.dosw.rideci.Adapter;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import edu.dosw.rideci.infrastructure.persistance.Repository.TravelRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.dosw.rideci.application.events.TravelCompletedEvent;
@@ -29,8 +29,9 @@ import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.domain.model.enums.TravelType;
 import edu.dosw.rideci.exceptions.TravelNotFoundException;
 import edu.dosw.rideci.infrastructure.persistance.Entity.TravelDocument;
-import edu.dosw.rideci.infrastructure.persistance.Repository.mapper.TravelMapper;
+import edu.dosw.rideci.infrastructure.persistance.Repository.TravelRepository;
 import edu.dosw.rideci.infrastructure.persistance.Repository.TravelRepostoryAdapter;
+import edu.dosw.rideci.infrastructure.persistance.Repository.mapper.TravelMapper;
 
 @ExtendWith(MockitoExtension.class)
 class TravelRepositoryAdapterTest {
@@ -57,12 +58,12 @@ class TravelRepositoryAdapterTest {
     void setup() {
         travelDomain = Travel.builder()
                 .id("550e8400-e29b-41d4-a716-446655440000")
-                .driverId("10")
+                .driverId(10L)
                 .availableSlots(3)
                 .status(Status.ACTIVE)
                 .estimatedCost(20.5)
                 .departureDateAndTime(departureDate)
-                .passengersId(List.of("2", "3"))
+                .passengersId(List.of(2L, 3L))
                 .travelType(TravelType.TRIP)
                 .conditions("No smoking")
                 .origin(null)
@@ -71,12 +72,12 @@ class TravelRepositoryAdapterTest {
 
         travelDocument = TravelDocument.builder()
                 .id("550e8400-e29b-41d4-a716-446655440000")
-                .driverId("10")
+                .driverId(10L)
                 .availableSlots(3)
                 .status(Status.ACTIVE)
                 .estimatedCost(20.5)
                 .departureDateAndTime(departureDate)
-                .passengersId(List.of("2", "3"))
+                .passengersId(List.of(2L, 3L))
                 .travelType(TravelType.TRIP)
                 .conditions("No smoking")
                 .origin(null)
@@ -85,12 +86,12 @@ class TravelRepositoryAdapterTest {
 
         travelDocumentSaved = TravelDocument.builder()
                 .id("550e8400-e29b-41d4-a716-446655440000")
-                .driverId("10")
+                .driverId(10L)
                 .availableSlots(3)
                 .status(Status.ACTIVE)
                 .estimatedCost(20.5)
                 .departureDateAndTime(departureDate)
-                .passengersId(List.of("2", "3"))
+                .passengersId(List.of(2L, 3L))
                 .travelType(TravelType.TRIP)
                 .conditions("No smoking")
                 .origin(null)
@@ -111,7 +112,7 @@ class TravelRepositoryAdapterTest {
 
         assertNotNull(result);
         assertEquals("550e8400-e29b-41d4-a716-446655440000", result.getId());
-        assertEquals("10", result.getDriverId());
+        assertEquals(10L, result.getDriverId());
         assertEquals(Status.ACTIVE, result.getStatus());
         assertEquals(3, result.getAvailableSlots());
 
@@ -129,7 +130,7 @@ class TravelRepositoryAdapterTest {
 
         assertNotNull(result);
         assertEquals("550e8400-e29b-41d4-a716-446655440000", result.getId());
-        assertEquals("10", result.getDriverId());
+        assertEquals(10L, result.getDriverId());
 
         verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
         verify(travelMapper, times(1)).toDomain(any(TravelDocument.class));
@@ -161,12 +162,12 @@ class TravelRepositoryAdapterTest {
     void shouldUpdateTravelSuccessfully() {
         Travel updatedTravel = Travel.builder()
                 .id("550e8400-e29b-41d4-a716-446655440000")
-                .driverId("10")
+                .driverId(10L)
                 .availableSlots(5)
                 .status(Status.ACTIVE)
                 .estimatedCost(25.0)
                 .departureDateAndTime(departureDate)
-                .passengersId(List.of("2", "3", "4"))
+                .passengersId(List.of(2L, 3L, 4L))
                 .travelType(TravelType.TRIP)
                 .conditions("No smoking allowed")
                 .origin(null)
@@ -175,12 +176,12 @@ class TravelRepositoryAdapterTest {
 
         TravelDocument updatedDocument = TravelDocument.builder()
                 .id("550e8400-e29b-41d4-a716-446655440000")
-                .driverId("10")
+                .driverId(10L)
                 .availableSlots(5)
                 .status(Status.ACTIVE)
                 .estimatedCost(25.0)
                 .departureDateAndTime(departureDate)
-                .passengersId(List.of("2", "3", "4"))
+                .passengersId(List.of(2L, 3L, 4L))
                 .travelType(TravelType.TRIP)
                 .conditions("No smoking allowed")
                 .origin(null)
@@ -241,12 +242,12 @@ class TravelRepositoryAdapterTest {
     void shouldChangeStateTravelToCompletedSuccessfully() {
         Travel completedTravel = Travel.builder()
                 .id("550e8400-e29b-41d4-a716-446655440000")
-                .driverId("10")
+                .driverId(10L)
                 .availableSlots(3)
                 .status(Status.COMPLETED)
                 .estimatedCost(20.5)
                 .departureDateAndTime(departureDate)
-                .passengersId(List.of("2", "3"))
+                .passengersId(List.of(2L, 3L))
                 .travelType(TravelType.TRIP)
                 .conditions("No smoking")
                 .origin(null)
@@ -255,12 +256,12 @@ class TravelRepositoryAdapterTest {
 
         TravelDocument completedDocument = TravelDocument.builder()
                 .id("550e8400-e29b-41d4-a716-446655440000")
-                .driverId("10")
+                .driverId(10L)
                 .availableSlots(3)
                 .status(Status.COMPLETED)
                 .estimatedCost(20.5)
                 .departureDateAndTime(departureDate)
-                .passengersId(List.of("2", "3"))
+                .passengersId(List.of(2L, 3L))
                 .travelType(TravelType.TRIP)
                 .conditions("No smoking")
                 .origin(null)
@@ -287,12 +288,12 @@ class TravelRepositoryAdapterTest {
     void shouldChangeStateTravelToCancelledSuccessfully() {
         Travel cancelledTravel = Travel.builder()
                 .id("550e8400-e29b-41d4-a716-446655440000")
-                .driverId("10")
+                .driverId(10L)
                 .availableSlots(3)
                 .status(Status.CANCELLED)
                 .estimatedCost(20.5)
                 .departureDateAndTime(departureDate)
-                .passengersId(List.of("2", "3"))
+                .passengersId(List.of(2L, 3L))
                 .travelType(TravelType.TRIP)
                 .conditions("No smoking")
                 .origin(null)
@@ -301,12 +302,12 @@ class TravelRepositoryAdapterTest {
 
         TravelDocument cancelledDocument = TravelDocument.builder()
                 .id("550e8400-e29b-41d4-a716-446655440000")
-                .driverId("10")
+                .driverId(10L)
                 .availableSlots(3)
                 .status(Status.CANCELLED)
                 .estimatedCost(20.5)
                 .departureDateAndTime(departureDate)
-                .passengersId(List.of("2", "3"))
+                .passengersId(List.of(2L, 3L))
                 .travelType(TravelType.TRIP)
                 .conditions("No smoking")
                 .origin(null)

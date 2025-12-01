@@ -6,6 +6,6 @@ import edu.dosw.rideci.domain.model.Travel;
 
 public interface GetAllTravelByDriverIdUseCase {
 
-    List<Travel> getAllTravelsByDriverId(String driverId);
+    List<Travel> getAllTravelsByDriverId(Long driverId);
 
 }

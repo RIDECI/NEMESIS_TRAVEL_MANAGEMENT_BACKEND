@@ -13,10 +13,10 @@ import edu.dosw.rideci.application.port.in.GetAllTravelUseCase;
 import edu.dosw.rideci.application.port.in.GetPassengerListUseCase;
 import edu.dosw.rideci.application.port.in.GetTravelUseCase;
 import edu.dosw.rideci.application.port.in.ModifyTravelUseCase;
+import edu.dosw.rideci.application.port.out.TravelRepositoryPort;
 import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
-import edu.dosw.rideci.application.port.out.TravelRepositoryPort;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -67,14 +67,14 @@ public class TravelService implements CreateTravelUseCase, GetTravelUseCase, Del
     }
 
     @Override
-    public List<String> getPassengerList(String id, List<String> passengersId) {
+    public List<Long> getPassengerList(String id, List<Long> passengersId) {
 
         return travelRepositoryPort.getPassengerList(id, passengersId);
 
     }
 
     @Override
-    public List<Travel> getAllTravelsByDriverId(String driverId) {
+    public List<Travel> getAllTravelsByDriverId(Long driverId) {
 
         return travelRepositoryPort.getAllTravelsByDriverId(driverId);
 
