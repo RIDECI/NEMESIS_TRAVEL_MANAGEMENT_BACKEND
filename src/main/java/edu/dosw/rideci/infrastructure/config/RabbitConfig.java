@@ -28,6 +28,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue travelCancelledEvent() {
+        return new Queue("travel.cancelled.queue", true);
+    }
+
+    @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
@@ -35,6 +40,11 @@ public class RabbitConfig {
     @Bean
     public TopicExchange travelExchange() {
         return new TopicExchange("travel.exchange", true, false);
+    }
+
+    @Bean
+    public Binding bindingTravelCancelled() {
+        return BindingBuilder.bind(travelCancelledEvent()).to(travelExchange()).with("travel.cancelled");
     }
 
     @Bean

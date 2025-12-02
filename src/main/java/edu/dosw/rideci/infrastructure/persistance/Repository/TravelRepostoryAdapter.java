@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import edu.dosw.rideci.application.events.TravelCancelledEvent;
 import edu.dosw.rideci.application.events.TravelCompletedEvent;
 import edu.dosw.rideci.application.events.TravelCreatedEvent;
 import edu.dosw.rideci.application.events.TravelUpdatedEvent;
@@ -80,6 +81,12 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     public void deleteTravelById(String id) {
 
         travelRepository.deleteById(id);
+
+        TravelCancelledEvent event = TravelCancelledEvent.builder()
+                .travelId(id)
+                .build();
+
+        eventPublisher.publish(event, "travel.cancelled");
 
     }
 
