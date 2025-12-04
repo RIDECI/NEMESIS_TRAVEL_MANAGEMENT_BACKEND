@@ -32,9 +32,14 @@ import edu.dosw.rideci.application.mapper.TravelMapperInitial;
 import edu.dosw.rideci.application.port.in.ChangeStateTravelUseCase;
 import edu.dosw.rideci.application.port.in.CreateTravelUseCase;
 import edu.dosw.rideci.application.port.in.DeleteTravelUseCase;
+import edu.dosw.rideci.application.port.in.GetAllTravelByDriverIdUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelUseCase;
+import edu.dosw.rideci.application.port.in.GetAllTravelsByPassengerIdUseCase;
+import edu.dosw.rideci.application.port.in.GetPassengerListUseCase;
 import edu.dosw.rideci.application.port.in.GetTravelUseCase;
 import edu.dosw.rideci.application.port.in.ModifyTravelUseCase;
+import edu.dosw.rideci.application.port.in.GetAllTravelsByOrganizerUseCase;
+
 import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.domain.model.enums.TravelType;
@@ -70,10 +75,16 @@ class TravelControllerTest {
         private ChangeStateTravelUseCase changeStateTravelUseCase;
 
         @MockitoBean
-        private edu.dosw.rideci.application.port.in.GetPassengerListUseCase getPassengerListUseCase;
+        private GetPassengerListUseCase getPassengerListUseCase;
 
         @MockitoBean
-        private edu.dosw.rideci.application.port.in.GetAllTravelByDriverIdUseCase getAllTravelByDriverIdUseCase;
+        private GetAllTravelByDriverIdUseCase getAllTravelByDriverIdUseCase;
+
+        @MockitoBean
+        private GetAllTravelsByOrganizerUseCase getAllTravelsByOrganizerId;
+
+        @MockitoBean
+        private GetAllTravelsByPassengerIdUseCase getAllTravelsByPassengerIdUseCase;
 
         @MockitoBean
         private TravelMapperInitial travelMapper;
