@@ -23,4 +23,8 @@ public interface TravelRepositoryPort {
 
     List<Travel> getAllTravelsByDriverId(Long driverId);
 
+    List<Travel> getAllTravelsByPassengerId(Long passengerId);
+
+    List<Travel> getAllTravelsByOrganizerId(Long organizerId);
+
 }

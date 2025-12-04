@@ -10,4 +10,8 @@ public interface TravelRepository extends MongoRepository<TravelDocument, String
 
     List<TravelDocument> findAllByDriverId(Long driverId);
 
+    List<TravelDocument> findAllByOrganizerId(Long organizerId);
+
+    List<TravelDocument> findAllByPassengersId(Long passengerId);
+
 }

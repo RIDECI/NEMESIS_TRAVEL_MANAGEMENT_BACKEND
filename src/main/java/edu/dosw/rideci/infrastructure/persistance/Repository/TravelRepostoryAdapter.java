@@ -144,6 +144,9 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
             TravelCompletedEvent completedEvent = TravelCompletedEvent.builder()
                     .travelId(travelToModifyState.getId())
                     .driverId(travelToModifyState.getDriverId())
+                    .organizerId(travelToModifyState.getOrganizerId())
+                    .travelType(travelToModifyState.getTravelType())
+                    .departureDateAndTime(travelToModifyState.getDepartureDateAndTime())
                     .passengerList(travelToModifyState.getPassengersId())
                     .state(travelToModifyState.getStatus())
                     .build();
@@ -176,6 +179,24 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         List<TravelDocument> allTravelByDriver = travelRepository.findAllByDriverId(driverId);
 
         return travelMapper.toListDomain(allTravelByDriver);
+
+    }
+
+    @Override
+    public List<Travel> getAllTravelsByOrganizerId(Long organizerId) {
+
+        List<TravelDocument> allTravelByOrganizerId = travelRepository.findAllByOrganizerId(organizerId);
+
+        return travelMapper.toListDomain(allTravelByOrganizerId);
+
+    }
+
+    @Override
+    public List<Travel> getAllTravelsByPassengerId(Long passengerId) {
+
+        List<TravelDocument> allTravels = travelRepository.findAllByPassengersId(passengerId);
+
+        return travelMapper.toListDomain(allTravels);
 
     }
 

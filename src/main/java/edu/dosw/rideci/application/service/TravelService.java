@@ -10,6 +10,8 @@ import edu.dosw.rideci.application.port.in.CreateTravelUseCase;
 import edu.dosw.rideci.application.port.in.DeleteTravelUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelByDriverIdUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelUseCase;
+import edu.dosw.rideci.application.port.in.GetAllTravelsByOrganizerUseCase;
+import edu.dosw.rideci.application.port.in.GetAllTravelsByPassengerIdUseCase;
 import edu.dosw.rideci.application.port.in.GetPassengerListUseCase;
 import edu.dosw.rideci.application.port.in.GetTravelUseCase;
 import edu.dosw.rideci.application.port.in.ModifyTravelUseCase;
@@ -22,7 +24,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TravelService implements CreateTravelUseCase, GetTravelUseCase, DeleteTravelUseCase, ModifyTravelUseCase,
-        GetAllTravelUseCase, ChangeStateTravelUseCase, GetPassengerListUseCase, GetAllTravelByDriverIdUseCase {
+        GetAllTravelUseCase, ChangeStateTravelUseCase, GetPassengerListUseCase, GetAllTravelByDriverIdUseCase,
+        GetAllTravelsByOrganizerUseCase,
+        GetAllTravelsByPassengerIdUseCase {
 
     private final TravelRepositoryPort travelRepositoryPort;
     private final TravelMapperInitial travelMapper;
@@ -78,6 +82,18 @@ public class TravelService implements CreateTravelUseCase, GetTravelUseCase, Del
 
         return travelRepositoryPort.getAllTravelsByDriverId(driverId);
 
+    }
+
+    @Override
+    public List<Travel> getAllTravelsByPassengerId(Long passengerId) {
+
+        return travelRepositoryPort.getAllTravelsByPassengerId(passengerId);
+
+    }
+
+    @Override
+    public List<Travel> getAllTravelsByOrganizerId(Long organizerId) {
+        return travelRepositoryPort.getAllTravelsByOrganizerId(organizerId);
     }
 
 }
