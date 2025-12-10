@@ -249,7 +249,7 @@ class TravelControllerTest {
                 verify(getAllTravelUseCase, times(1)).getAllTravels();
         }
 
-        @DisplayName("Should update travel")
+        @DisplayName("Should update travel status")
         @Test
         void shouldUpdateTravelStatusSuccessfully() throws Exception {
                 Travel travelWithCancelledStatus = Travel.builder()
@@ -295,5 +295,116 @@ class TravelControllerTest {
 
                 verify(changeStateTravelUseCase, times(1))
                                 .changeStateTravel("550e8400-e29b-41d4-a716-446655440000", Status.CANCELLED);
+        }
+
+        @DisplayName("Should get occupant list")
+        @Test
+        void shouldGetOccupantListSuccessfully() throws Exception {
+                List<Long> passengerList = List.of(2L, 3L);
+                
+                when(getPassengerListUseCase.getPassengerList("550e8400-e29b-41d4-a716-446655440000", passengerList))
+                                .thenReturn(passengerList);
+
+                mockMvc.perform(get("/travels/occupantList/{id}", "550e8400-e29b-41d4-a716-446655440000")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(passengerList)))
+                                .andExpect(status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$[0]").value(2))
+                                .andExpect(jsonPath("$[1]").value(3));
+
+                verify(getPassengerListUseCase, times(1))
+                                .getPassengerList("550e8400-e29b-41d4-a716-446655440000", passengerList);
+        }
+
+        @DisplayName("Should get all travels by driver ID")
+        @Test
+        void shouldGetAllTravelsByDriverIdSuccessfully() throws Exception {
+                List<Travel> travelList = List.of(travelDomain);
+                List<TravelResponse> travelResponseList = List.of(travelResponse);
+
+                when(getAllTravelByDriverIdUseCase.getAllTravelsByDriverId(10L)).thenReturn(travelList);
+                when(travelMapper.toListResponse(any())).thenReturn(travelResponseList);
+
+                mockMvc.perform(get("/travels/driver/{driverId}", 10L)
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$[0].id").value("550e8400-e29b-41d4-a716-446655440000"))
+                                .andExpect(jsonPath("$[0].driverId").value(10L))
+                                .andExpect(jsonPath("$[0].availableSlots").value(3))
+                                .andExpect(jsonPath("$[0].estimatedCost").value(20.5));
+
+                verify(getAllTravelByDriverIdUseCase, times(1)).getAllTravelsByDriverId(10L);
+        }
+
+        @DisplayName("Should get all travels by organizer ID")
+        @Test
+        void shouldGetAllTravelsByOrganizerIdSuccessfully() throws Exception {
+                Travel travelWithOrganizer = Travel.builder()
+                                .id("550e8400-e29b-41d4-a716-446655440000")
+                                .organizerId(5L)
+                                .driverId(10L)
+                                .availableSlots(3)
+                                .status(Status.ACTIVE)
+                                .estimatedCost(20.5)
+                                .departureDateAndTime(departureDate)
+                                .passengersId(List.of(2L, 3L))
+                                .travelType(TravelType.TRIP)
+                                .conditions("No smoking")
+                                .origin(null)
+                                .destiny(null)
+                                .build();
+
+                TravelResponse responseWithOrganizer = TravelResponse.builder()
+                                .id("550e8400-e29b-41d4-a716-446655440000")
+                                .organizerId(5L)
+                                .driverId(10L)
+                                .availableSlots(3)
+                                .estimatedCost(20.5)
+                                .departureDateAndTime(departureDate)
+                                .passengersId(List.of(2L, 3L))
+                                .conditions("No smoking")
+                                .origin(null)
+                                .destiny(null)
+                                .build();
+
+                List<Travel> travelList = List.of(travelWithOrganizer);
+                List<TravelResponse> travelResponseList = List.of(responseWithOrganizer);
+
+                when(getAllTravelsByOrganizerId.getAllTravelsByOrganizerId(5L)).thenReturn(travelList);
+                when(travelMapper.toListResponse(any())).thenReturn(travelResponseList);
+
+                mockMvc.perform(get("/travels/organizer/{organizerId}", 5L)
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$[0].id").value("550e8400-e29b-41d4-a716-446655440000"))
+                                .andExpect(jsonPath("$[0].organizerId").value(5L))
+                                .andExpect(jsonPath("$[0].driverId").value(10L))
+                                .andExpect(jsonPath("$[0].availableSlots").value(3));
+
+                verify(getAllTravelsByOrganizerId, times(1)).getAllTravelsByOrganizerId(5L);
+        }
+
+        @DisplayName("Should get all travels by passenger ID")
+        @Test
+        void shouldGetAllTravelsByPassengerIdSuccessfully() throws Exception {
+                List<Travel> travelList = List.of(travelDomain);
+                List<TravelResponse> travelResponseList = List.of(travelResponse);
+
+                when(getAllTravelsByPassengerIdUseCase.getAllTravelsByPassengerId(2L)).thenReturn(travelList);
+                when(travelMapper.toListResponse(any())).thenReturn(travelResponseList);
+
+                mockMvc.perform(get("/travels/passenger/{passengerId}", 2L)
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$[0].id").value("550e8400-e29b-41d4-a716-446655440000"))
+                                .andExpect(jsonPath("$[0].driverId").value(10L))
+                                .andExpect(jsonPath("$[0].passengersId[0]").value(2))
+                                .andExpect(jsonPath("$[0].passengersId[1]").value(3));
+
+                verify(getAllTravelsByPassengerIdUseCase, times(1)).getAllTravelsByPassengerId(2L);
         }
 }

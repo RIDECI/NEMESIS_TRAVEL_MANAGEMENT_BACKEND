@@ -21,8 +21,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import edu.dosw.rideci.application.events.TravelCancelledEvent;
 import edu.dosw.rideci.application.events.TravelCompletedEvent;
 import edu.dosw.rideci.application.events.TravelCreatedEvent;
+import edu.dosw.rideci.application.events.TravelUpdatedEvent;
 import edu.dosw.rideci.application.port.out.EventPublisher;
 import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.domain.model.enums.Status;
@@ -149,15 +151,16 @@ class TravelRepositoryAdapterTest {
         verify(travelRepository, times(1)).findById("non-existent-id");
     }
 
-    @DisplayName("Should delete a travel by ID")
+    @DisplayName("Should delete a travel by ID and publish TravelCancelledEvent")
     @Test
     void shouldDeleteTravelByIdSuccessfully() {
         travelRepositoryAdapter.deleteTravelById("550e8400-e29b-41d4-a716-446655440000");
 
         verify(travelRepository, times(1)).deleteById("550e8400-e29b-41d4-a716-446655440000");
+        verify(eventPublisher, times(1)).publish(any(TravelCancelledEvent.class), eq("travel.cancelled"));
     }
 
-    @DisplayName("Should update a travel successfully")
+    @DisplayName("Should update a travel successfully and publish TravelUpdatedEvent")
     @Test
     void shouldUpdateTravelSuccessfully() {
         Travel updatedTravel = Travel.builder()
@@ -191,6 +194,7 @@ class TravelRepositoryAdapterTest {
         when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
         when(travelRepository.save(any(TravelDocument.class))).thenReturn(updatedDocument);
         when(travelMapper.toLocationEmbeddable(null)).thenReturn(null);
+        when(travelMapper.toLocationDomain(null)).thenReturn(null);
         when(travelMapper.toDomain(any(TravelDocument.class))).thenReturn(updatedTravel);
 
         Travel result = travelRepositoryAdapter.updateTravel("550e8400-e29b-41d4-a716-446655440000", updatedTravel);
@@ -203,6 +207,7 @@ class TravelRepositoryAdapterTest {
 
         verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
         verify(travelRepository, times(1)).save(any(TravelDocument.class));
+        verify(eventPublisher, times(1)).publish(any(TravelUpdatedEvent.class), eq("travel.updated"));
     }
 
     @DisplayName("Should throw TravelNotFoundException when updating non-existent travel")
@@ -340,5 +345,108 @@ class TravelRepositoryAdapterTest {
 
         verify(travelRepository, times(1)).findById("non-existent-id");
         verify(travelRepository, never()).save(any(TravelDocument.class));
+    }
+
+    @DisplayName("Should retrieve passenger list when lists match")
+    @Test
+    void shouldGetPassengerListWhenListsMatch() {
+        List<Long> passengerList = List.of(2L, 3L);
+
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
+
+        List<Long> result = travelRepositoryAdapter.getPassengerList("550e8400-e29b-41d4-a716-446655440000", passengerList);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(passengerList, result);
+
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
+    }
+
+    @DisplayName("Should return empty list when passenger lists do not match")
+    @Test
+    void shouldReturnEmptyListWhenPassengerListsDoNotMatch() {
+        List<Long> differentPassengerList = List.of(4L, 5L);
+
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
+
+        List<Long> result = travelRepositoryAdapter.getPassengerList("550e8400-e29b-41d4-a716-446655440000", differentPassengerList);
+
+        assertNotNull(result);
+        assertEquals(0, result.size());
+
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
+    }
+
+    @DisplayName("Should throw TravelNotFoundException when getting passenger list for non-existent travel")
+    @Test
+    void shouldThrowExceptionWhenGettingPassengerListForNonExistentTravel() {
+        when(travelRepository.findById("non-existent-id")).thenReturn(Optional.empty());
+
+        assertThrows(TravelNotFoundException.class, () -> {
+            travelRepositoryAdapter.getPassengerList("non-existent-id", List.of(1L, 2L));
+        });
+
+        verify(travelRepository, times(1)).findById("non-existent-id");
+    }
+
+    @DisplayName("Should retrieve all travels by driver ID")
+    @Test
+    void shouldGetAllTravelsByDriverId() {
+        List<TravelDocument> travelDocumentList = List.of(travelDocument);
+        List<Travel> expectedTravelList = List.of(travelDomain);
+
+        when(travelRepository.findAllByDriverId(10L)).thenReturn(travelDocumentList);
+        when(travelMapper.toListDomain(any())).thenReturn(expectedTravelList);
+
+        List<Travel> result = travelRepositoryAdapter.getAllTravelsByDriverId(10L);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(10L, result.get(0).getDriverId());
+
+        verify(travelRepository, times(1)).findAllByDriverId(10L);
+        verify(travelMapper, times(1)).toListDomain(travelDocumentList);
+    }
+
+    @DisplayName("Should retrieve all travels by organizer ID")
+    @Test
+    void shouldGetAllTravelsByOrganizerId() {
+        travelDomain.setOrganizerId(5L);
+        travelDocument.setOrganizerId(5L);
+
+        List<TravelDocument> travelDocumentList = List.of(travelDocument);
+        List<Travel> expectedTravelList = List.of(travelDomain);
+
+        when(travelRepository.findAllByOrganizerId(5L)).thenReturn(travelDocumentList);
+        when(travelMapper.toListDomain(any())).thenReturn(expectedTravelList);
+
+        List<Travel> result = travelRepositoryAdapter.getAllTravelsByOrganizerId(5L);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(5L, result.get(0).getOrganizerId());
+
+        verify(travelRepository, times(1)).findAllByOrganizerId(5L);
+        verify(travelMapper, times(1)).toListDomain(travelDocumentList);
+    }
+
+    @DisplayName("Should retrieve all travels by passenger ID")
+    @Test
+    void shouldGetAllTravelsByPassengerId() {
+        List<TravelDocument> travelDocumentList = List.of(travelDocument);
+        List<Travel> expectedTravelList = List.of(travelDomain);
+
+        when(travelRepository.findAllByPassengersId(2L)).thenReturn(travelDocumentList);
+        when(travelMapper.toListDomain(any())).thenReturn(expectedTravelList);
+
+        List<Travel> result = travelRepositoryAdapter.getAllTravelsByPassengerId(2L);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(List.of(2L, 3L), result.get(0).getPassengersId());
+
+        verify(travelRepository, times(1)).findAllByPassengersId(2L);
+        verify(travelMapper, times(1)).toListDomain(travelDocumentList);
     }
 }
