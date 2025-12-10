@@ -3,6 +3,7 @@ package edu.dosw.rideci.application.events;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import edu.dosw.rideci.domain.model.Location;
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.domain.model.enums.TravelType;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,8 @@ public class TravelCompletedEvent {
     private LocalDateTime departureDateAndTime;
 
     private List<Long> passengerList;
+
+    private Location destiny;
 
     private Status state;
 
