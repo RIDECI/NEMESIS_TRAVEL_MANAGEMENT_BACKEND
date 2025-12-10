@@ -4,6 +4,6 @@ import edu.dosw.rideci.domain.model.Travel;
 
 public interface GetTravelUseCase {
 
-    Travel getTravelById(Long id);
+    Travel getTravelById(String id);
 
 }

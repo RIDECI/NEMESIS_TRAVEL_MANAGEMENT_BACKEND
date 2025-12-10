@@ -9,16 +9,22 @@ public interface TravelRepositoryPort {
 
     Travel save(Travel travel);
 
-    Travel getTravelById(Long id);
+    Travel getTravelById(String id);
 
-    void deleteTravelById(Long id);
+    void deleteTravelById(String id);
 
-    Travel updateTravel(Long id, Travel travel);
+    Travel updateTravel(String id, Travel travel);
 
     List<Travel> getAllTravels();
 
-    Travel changeStateTravel(Long id, Status status);
+    Travel changeStateTravel(String id, Status status);
 
-    List<Long> getPassengerList(Long id, List<Long> passengersId);
+    List<Long> getPassengerList(String id, List<Long> passengersId);
+
+    List<Travel> getAllTravelsByDriverId(Long driverId);
+
+    List<Travel> getAllTravelsByPassengerId(Long passengerId);
+
+    List<Travel> getAllTravelsByOrganizerId(Long organizerId);
 
 }

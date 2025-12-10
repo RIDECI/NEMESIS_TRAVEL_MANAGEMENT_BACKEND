@@ -8,16 +8,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.domain.model.enums.TravelType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Document(collection = "travel")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TravelDocument {
 
     @Id
-    private Long id;
+    private String id;
 
     private Long organizerId;
 

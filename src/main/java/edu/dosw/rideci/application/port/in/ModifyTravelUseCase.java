@@ -5,6 +5,6 @@ import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
 
 public interface ModifyTravelUseCase {
 
-    Travel updateTravel(Long id, TravelRequest travel);
+    Travel updateTravel(String id, TravelRequest travel);
 
 }

@@ -1,36 +1,39 @@
 package edu.dosw.rideci.Adapter;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import edu.dosw.rideci.infrastructure.persistance.Repository.TravelRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import edu.dosw.rideci.application.events.TravelCancelledEvent;
 import edu.dosw.rideci.application.events.TravelCompletedEvent;
 import edu.dosw.rideci.application.events.TravelCreatedEvent;
+import edu.dosw.rideci.application.events.TravelUpdatedEvent;
 import edu.dosw.rideci.application.port.out.EventPublisher;
 import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.domain.model.enums.TravelType;
 import edu.dosw.rideci.exceptions.TravelNotFoundException;
 import edu.dosw.rideci.infrastructure.persistance.Entity.TravelDocument;
-import edu.dosw.rideci.infrastructure.persistance.Repository.mapper.TravelMapper;
+import edu.dosw.rideci.infrastructure.persistance.Repository.TravelRepository;
 import edu.dosw.rideci.infrastructure.persistance.Repository.TravelRepostoryAdapter;
+import edu.dosw.rideci.infrastructure.persistance.Repository.mapper.TravelMapper;
 
 @ExtendWith(MockitoExtension.class)
 class TravelRepositoryAdapterTest {
@@ -56,7 +59,7 @@ class TravelRepositoryAdapterTest {
     @BeforeEach
     void setup() {
         travelDomain = Travel.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.ACTIVE)
@@ -70,7 +73,7 @@ class TravelRepositoryAdapterTest {
                 .build();
 
         travelDocument = TravelDocument.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.ACTIVE)
@@ -84,7 +87,7 @@ class TravelRepositoryAdapterTest {
                 .build();
 
         travelDocumentSaved = TravelDocument.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.ACTIVE)
@@ -110,7 +113,7 @@ class TravelRepositoryAdapterTest {
         Travel result = travelRepositoryAdapter.save(travelDomain);
 
         assertNotNull(result);
-        assertEquals(1L, result.getId());
+        assertEquals("550e8400-e29b-41d4-a716-446655440000", result.getId());
         assertEquals(10L, result.getDriverId());
         assertEquals(Status.ACTIVE, result.getStatus());
         assertEquals(3, result.getAvailableSlots());
@@ -122,16 +125,16 @@ class TravelRepositoryAdapterTest {
     @DisplayName("Should retrieve a travel by ID")
     @Test
     void shouldGetTravelByIdSuccessfully() {
-        when(travelRepository.findById(1L)).thenReturn(Optional.of(travelDocument));
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
         when(travelMapper.toDomain(any(TravelDocument.class))).thenReturn(travelDomain);
 
-        Travel result = travelRepositoryAdapter.getTravelById(1L);
+        Travel result = travelRepositoryAdapter.getTravelById("550e8400-e29b-41d4-a716-446655440000");
 
         assertNotNull(result);
-        assertEquals(1L, result.getId());
+        assertEquals("550e8400-e29b-41d4-a716-446655440000", result.getId());
         assertEquals(10L, result.getDriverId());
 
-        verify(travelRepository, times(1)).findById(1L);
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
         verify(travelMapper, times(1)).toDomain(any(TravelDocument.class));
     }
 
@@ -139,28 +142,29 @@ class TravelRepositoryAdapterTest {
     @Test
     void shouldThrowExceptionWhenTravelNotFound() {
 
-        when(travelRepository.findById(999L)).thenReturn(Optional.empty());
+        when(travelRepository.findById("non-existent-id")).thenReturn(Optional.empty());
 
         assertThrows(TravelNotFoundException.class, () -> {
-            travelRepositoryAdapter.getTravelById(999L);
+            travelRepositoryAdapter.getTravelById("non-existent-id");
         });
 
-        verify(travelRepository, times(1)).findById(999L);
+        verify(travelRepository, times(1)).findById("non-existent-id");
     }
 
-    @DisplayName("Should delete a travel by ID")
+    @DisplayName("Should delete a travel by ID and publish TravelCancelledEvent")
     @Test
     void shouldDeleteTravelByIdSuccessfully() {
-        travelRepositoryAdapter.deleteTravelById(1L);
+        travelRepositoryAdapter.deleteTravelById("550e8400-e29b-41d4-a716-446655440000");
 
-        verify(travelRepository, times(1)).deleteById(1L);
+        verify(travelRepository, times(1)).deleteById("550e8400-e29b-41d4-a716-446655440000");
+        verify(eventPublisher, times(1)).publish(any(TravelCancelledEvent.class), eq("travel.cancelled"));
     }
 
-    @DisplayName("Should update a travel successfully")
+    @DisplayName("Should update a travel successfully and publish TravelUpdatedEvent")
     @Test
     void shouldUpdateTravelSuccessfully() {
         Travel updatedTravel = Travel.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(5)
                 .status(Status.ACTIVE)
@@ -174,7 +178,7 @@ class TravelRepositoryAdapterTest {
                 .build();
 
         TravelDocument updatedDocument = TravelDocument.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(5)
                 .status(Status.ACTIVE)
@@ -187,33 +191,35 @@ class TravelRepositoryAdapterTest {
                 .destiny(null)
                 .build();
 
-        when(travelRepository.findById(1L)).thenReturn(Optional.of(travelDocument));
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
         when(travelRepository.save(any(TravelDocument.class))).thenReturn(updatedDocument);
         when(travelMapper.toLocationEmbeddable(null)).thenReturn(null);
+        when(travelMapper.toLocationDomain(null)).thenReturn(null);
         when(travelMapper.toDomain(any(TravelDocument.class))).thenReturn(updatedTravel);
 
-        Travel result = travelRepositoryAdapter.updateTravel(1L, updatedTravel);
+        Travel result = travelRepositoryAdapter.updateTravel("550e8400-e29b-41d4-a716-446655440000", updatedTravel);
 
         assertNotNull(result);
-        assertEquals(1L, result.getId());
+        assertEquals("550e8400-e29b-41d4-a716-446655440000", result.getId());
         assertEquals(5, result.getAvailableSlots());
         assertEquals(25.0, result.getEstimatedCost());
         assertEquals("No smoking allowed", result.getConditions());
 
-        verify(travelRepository, times(1)).findById(1L);
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
         verify(travelRepository, times(1)).save(any(TravelDocument.class));
+        verify(eventPublisher, times(1)).publish(any(TravelUpdatedEvent.class), eq("travel.updated"));
     }
 
     @DisplayName("Should throw TravelNotFoundException when updating non-existent travel")
     @Test
     void shouldThrowExceptionWhenUpdatingNonExistentTravel() {
-        when(travelRepository.findById(999L)).thenReturn(Optional.empty());
+        when(travelRepository.findById("non-existent-id")).thenReturn(Optional.empty());
 
         assertThrows(TravelNotFoundException.class, () -> {
-            travelRepositoryAdapter.updateTravel(999L, travelDomain);
+            travelRepositoryAdapter.updateTravel("non-existent-id", travelDomain);
         });
 
-        verify(travelRepository, times(1)).findById(999L);
+        verify(travelRepository, times(1)).findById("non-existent-id");
         verify(travelRepository, never()).save(any(TravelDocument.class));
     }
 
@@ -230,7 +236,7 @@ class TravelRepositoryAdapterTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getId());
+        assertEquals("550e8400-e29b-41d4-a716-446655440000", result.get(0).getId());
 
         verify(travelRepository, times(1)).findAll();
         verify(travelMapper, times(1)).toListDomain(travelDocumentList);
@@ -240,7 +246,7 @@ class TravelRepositoryAdapterTest {
     @Test
     void shouldChangeStateTravelToCompletedSuccessfully() {
         Travel completedTravel = Travel.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.COMPLETED)
@@ -254,7 +260,7 @@ class TravelRepositoryAdapterTest {
                 .build();
 
         TravelDocument completedDocument = TravelDocument.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.COMPLETED)
@@ -267,16 +273,17 @@ class TravelRepositoryAdapterTest {
                 .destiny(null)
                 .build();
 
-        when(travelRepository.findById(1L)).thenReturn(Optional.of(travelDocument));
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
         when(travelRepository.save(any(TravelDocument.class))).thenReturn(completedDocument);
         when(travelMapper.toDomain(any(TravelDocument.class))).thenReturn(completedTravel);
 
-        Travel result = travelRepositoryAdapter.changeStateTravel(1L, Status.COMPLETED);
+        Travel result = travelRepositoryAdapter.changeStateTravel("550e8400-e29b-41d4-a716-446655440000",
+                Status.COMPLETED);
 
         assertNotNull(result);
         assertEquals(Status.COMPLETED, result.getStatus());
 
-        verify(travelRepository, times(1)).findById(1L);
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
         verify(travelRepository, times(1)).save(any(TravelDocument.class));
         verify(eventPublisher, times(1)).publish(any(TravelCompletedEvent.class), eq("travel.completed"));
     }
@@ -285,7 +292,7 @@ class TravelRepositoryAdapterTest {
     @Test
     void shouldChangeStateTravelToCancelledSuccessfully() {
         Travel cancelledTravel = Travel.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.CANCELLED)
@@ -299,7 +306,7 @@ class TravelRepositoryAdapterTest {
                 .build();
 
         TravelDocument cancelledDocument = TravelDocument.builder()
-                .id(1L)
+                .id("550e8400-e29b-41d4-a716-446655440000")
                 .driverId(10L)
                 .availableSlots(3)
                 .status(Status.CANCELLED)
@@ -312,16 +319,17 @@ class TravelRepositoryAdapterTest {
                 .destiny(null)
                 .build();
 
-        when(travelRepository.findById(1L)).thenReturn(Optional.of(travelDocument));
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
         when(travelRepository.save(any(TravelDocument.class))).thenReturn(cancelledDocument);
         when(travelMapper.toDomain(any(TravelDocument.class))).thenReturn(cancelledTravel);
 
-        Travel result = travelRepositoryAdapter.changeStateTravel(1L, Status.CANCELLED);
+        Travel result = travelRepositoryAdapter.changeStateTravel("550e8400-e29b-41d4-a716-446655440000",
+                Status.CANCELLED);
 
         assertNotNull(result);
         assertEquals(Status.CANCELLED, result.getStatus());
 
-        verify(travelRepository, times(1)).findById(1L);
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
         verify(travelRepository, times(1)).save(any(TravelDocument.class));
         verify(eventPublisher, never()).publish(any(TravelCompletedEvent.class), eq("travel.completed"));
     }
@@ -329,13 +337,116 @@ class TravelRepositoryAdapterTest {
     @DisplayName("Should throw TravelNotFoundException when changing state of non-existent travel")
     @Test
     void shouldThrowExceptionWhenChangingStateOfNonExistentTravel() {
-        when(travelRepository.findById(999L)).thenReturn(Optional.empty());
+        when(travelRepository.findById("non-existent-id")).thenReturn(Optional.empty());
 
         assertThrows(TravelNotFoundException.class, () -> {
-            travelRepositoryAdapter.changeStateTravel(999L, Status.COMPLETED);
+            travelRepositoryAdapter.changeStateTravel("non-existent-id", Status.COMPLETED);
         });
 
-        verify(travelRepository, times(1)).findById(999L);
+        verify(travelRepository, times(1)).findById("non-existent-id");
         verify(travelRepository, never()).save(any(TravelDocument.class));
+    }
+
+    @DisplayName("Should retrieve passenger list when lists match")
+    @Test
+    void shouldGetPassengerListWhenListsMatch() {
+        List<Long> passengerList = List.of(2L, 3L);
+
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
+
+        List<Long> result = travelRepositoryAdapter.getPassengerList("550e8400-e29b-41d4-a716-446655440000", passengerList);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(passengerList, result);
+
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
+    }
+
+    @DisplayName("Should return empty list when passenger lists do not match")
+    @Test
+    void shouldReturnEmptyListWhenPassengerListsDoNotMatch() {
+        List<Long> differentPassengerList = List.of(4L, 5L);
+
+        when(travelRepository.findById("550e8400-e29b-41d4-a716-446655440000")).thenReturn(Optional.of(travelDocument));
+
+        List<Long> result = travelRepositoryAdapter.getPassengerList("550e8400-e29b-41d4-a716-446655440000", differentPassengerList);
+
+        assertNotNull(result);
+        assertEquals(0, result.size());
+
+        verify(travelRepository, times(1)).findById("550e8400-e29b-41d4-a716-446655440000");
+    }
+
+    @DisplayName("Should throw TravelNotFoundException when getting passenger list for non-existent travel")
+    @Test
+    void shouldThrowExceptionWhenGettingPassengerListForNonExistentTravel() {
+        when(travelRepository.findById("non-existent-id")).thenReturn(Optional.empty());
+
+        assertThrows(TravelNotFoundException.class, () -> {
+            travelRepositoryAdapter.getPassengerList("non-existent-id", List.of(1L, 2L));
+        });
+
+        verify(travelRepository, times(1)).findById("non-existent-id");
+    }
+
+    @DisplayName("Should retrieve all travels by driver ID")
+    @Test
+    void shouldGetAllTravelsByDriverId() {
+        List<TravelDocument> travelDocumentList = List.of(travelDocument);
+        List<Travel> expectedTravelList = List.of(travelDomain);
+
+        when(travelRepository.findAllByDriverId(10L)).thenReturn(travelDocumentList);
+        when(travelMapper.toListDomain(any())).thenReturn(expectedTravelList);
+
+        List<Travel> result = travelRepositoryAdapter.getAllTravelsByDriverId(10L);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(10L, result.get(0).getDriverId());
+
+        verify(travelRepository, times(1)).findAllByDriverId(10L);
+        verify(travelMapper, times(1)).toListDomain(travelDocumentList);
+    }
+
+    @DisplayName("Should retrieve all travels by organizer ID")
+    @Test
+    void shouldGetAllTravelsByOrganizerId() {
+        travelDomain.setOrganizerId(5L);
+        travelDocument.setOrganizerId(5L);
+
+        List<TravelDocument> travelDocumentList = List.of(travelDocument);
+        List<Travel> expectedTravelList = List.of(travelDomain);
+
+        when(travelRepository.findAllByOrganizerId(5L)).thenReturn(travelDocumentList);
+        when(travelMapper.toListDomain(any())).thenReturn(expectedTravelList);
+
+        List<Travel> result = travelRepositoryAdapter.getAllTravelsByOrganizerId(5L);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(5L, result.get(0).getOrganizerId());
+
+        verify(travelRepository, times(1)).findAllByOrganizerId(5L);
+        verify(travelMapper, times(1)).toListDomain(travelDocumentList);
+    }
+
+    @DisplayName("Should retrieve all travels by passenger ID")
+    @Test
+    void shouldGetAllTravelsByPassengerId() {
+        List<TravelDocument> travelDocumentList = List.of(travelDocument);
+        List<Travel> expectedTravelList = List.of(travelDomain);
+
+        when(travelRepository.findAllByPassengersId(2L)).thenReturn(travelDocumentList);
+        when(travelMapper.toListDomain(any())).thenReturn(expectedTravelList);
+
+        List<Travel> result = travelRepositoryAdapter.getAllTravelsByPassengerId(2L);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(List.of(2L, 3L), result.get(0).getPassengersId());
+
+        verify(travelRepository, times(1)).findAllByPassengersId(2L);
+        verify(travelMapper, times(1)).toListDomain(travelDocumentList);
     }
 }

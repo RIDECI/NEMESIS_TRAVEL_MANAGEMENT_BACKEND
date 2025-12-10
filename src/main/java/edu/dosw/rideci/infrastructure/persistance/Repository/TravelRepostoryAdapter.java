@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import edu.dosw.rideci.application.events.TravelCancelledEvent;
 import edu.dosw.rideci.application.events.TravelCompletedEvent;
 import edu.dosw.rideci.application.events.TravelCreatedEvent;
+import edu.dosw.rideci.application.events.TravelUpdatedEvent;
 import edu.dosw.rideci.application.port.out.EventPublisher;
 import edu.dosw.rideci.application.port.out.TravelRepositoryPort;
 import edu.dosw.rideci.domain.model.Travel;
@@ -33,8 +35,8 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
                 .organizerId(travel.getOrganizerId())
                 .driverId(travel.getDriverId())
                 .availableSlots(travel.getAvailableSlots())
-                .status(Status.ACTIVE)
-                .travelType(TravelType.TRIP)
+                .status(travel.getStatus())
+                .travelType(travel.getTravelType())
                 .estimatedCost(travel.getEstimatedCost())
                 .departureDateAndTime(travel.getDepartureDateAndTime())
                 .passengersId(travel.getPassengersId())
@@ -66,7 +68,7 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     }
 
     @Override
-    public Travel getTravelById(Long id) {
+    public Travel getTravelById(String id) {
 
         TravelDocument travel = travelRepository.findById(id)
                 .orElseThrow(() -> new TravelNotFoundException("The travel with id: {id}, doesnt exists "));
@@ -76,14 +78,20 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     }
 
     @Override
-    public void deleteTravelById(Long id) {
+    public void deleteTravelById(String id) {
 
         travelRepository.deleteById(id);
+
+        TravelCancelledEvent event = TravelCancelledEvent.builder()
+                .travelId(id)
+                .build();
+
+        eventPublisher.publish(event, "travel.cancelled");
 
     }
 
     @Override
-    public Travel updateTravel(Long id, Travel travel) {
+    public Travel updateTravel(String id, Travel travel) {
 
         TravelDocument actualTravel = travelRepository.findById(id)
                 .orElseThrow(() -> new TravelNotFoundException("Dont exist the travel with id: {id}"));
@@ -95,6 +103,17 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         actualTravel.setConditions(travel.getConditions());
         actualTravel.setOrigin(travelMapper.toLocationEmbeddable(travel.getOrigin()));
         actualTravel.setDestiny(travelMapper.toLocationEmbeddable(travel.getDestiny()));
+
+        TravelUpdatedEvent travelUpdatedEvent = TravelUpdatedEvent.builder()
+                .travelId(id)
+                .availableSlots(actualTravel.getAvailableSlots())
+                .estimatedCost(actualTravel.getEstimatedCost())
+                .departureDateAndTime(actualTravel.getDepartureDateAndTime())
+                .origin(travelMapper.toLocationDomain(actualTravel.getOrigin()))
+                .destiny(travelMapper.toLocationDomain(actualTravel.getDestiny()))
+                .build();
+
+        eventPublisher.publish(travelUpdatedEvent, "travel.updated");
 
         TravelDocument travelUpdated = travelRepository.save(actualTravel);
 
@@ -112,7 +131,7 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     }
 
     @Override
-    public Travel changeStateTravel(Long id, Status status) {
+    public Travel changeStateTravel(String id, Status status) {
 
         TravelDocument travelToModifyState = travelRepository.findById(id).orElseThrow(
                 () -> new TravelNotFoundException("The trip to change the state with id: {id} does not exist "));
@@ -124,6 +143,11 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         if (status.equals(Status.COMPLETED)) {
             TravelCompletedEvent completedEvent = TravelCompletedEvent.builder()
                     .travelId(travelToModifyState.getId())
+                    .driverId(travelToModifyState.getDriverId())
+                    .organizerId(travelToModifyState.getOrganizerId())
+                    .travelType(travelToModifyState.getTravelType())
+                    .departureDateAndTime(travelToModifyState.getDepartureDateAndTime())
+                    .passengerList(travelToModifyState.getPassengersId())
                     .state(travelToModifyState.getStatus())
                     .build();
             eventPublisher.publish(completedEvent, "travel.completed");
@@ -134,7 +158,7 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     }
 
     @Override
-    public List<Long> getPassengerList(Long id, List<Long> passengerList) {
+    public List<Long> getPassengerList(String id, List<Long> passengerList) {
 
         TravelDocument travel = travelRepository.findById(id)
                 .orElseThrow(() -> new TravelNotFoundException("The travel with id: {id} not found "));
@@ -146,6 +170,33 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
         }
 
         return new ArrayList<>();
+
+    }
+
+    @Override
+    public List<Travel> getAllTravelsByDriverId(Long driverId) {
+
+        List<TravelDocument> allTravelByDriver = travelRepository.findAllByDriverId(driverId);
+
+        return travelMapper.toListDomain(allTravelByDriver);
+
+    }
+
+    @Override
+    public List<Travel> getAllTravelsByOrganizerId(Long organizerId) {
+
+        List<TravelDocument> allTravelByOrganizerId = travelRepository.findAllByOrganizerId(organizerId);
+
+        return travelMapper.toListDomain(allTravelByOrganizerId);
+
+    }
+
+    @Override
+    public List<Travel> getAllTravelsByPassengerId(Long passengerId) {
+
+        List<TravelDocument> allTravels = travelRepository.findAllByPassengersId(passengerId);
+
+        return travelMapper.toListDomain(allTravels);
 
     }
 

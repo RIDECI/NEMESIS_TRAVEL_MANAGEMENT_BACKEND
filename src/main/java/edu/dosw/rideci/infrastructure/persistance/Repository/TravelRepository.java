@@ -1,9 +1,17 @@
 package edu.dosw.rideci.infrastructure.persistance.Repository;
 
+import java.util.List;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import edu.dosw.rideci.infrastructure.persistance.Entity.TravelDocument;
 
-public interface TravelRepository extends MongoRepository<TravelDocument, Long> {
+public interface TravelRepository extends MongoRepository<TravelDocument, String> {
+
+    List<TravelDocument> findAllByDriverId(Long driverId);
+
+    List<TravelDocument> findAllByOrganizerId(Long organizerId);
+
+    List<TravelDocument> findAllByPassengersId(Long passengerId);
 
 }

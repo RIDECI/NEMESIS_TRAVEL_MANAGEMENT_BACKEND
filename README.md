@@ -396,7 +396,8 @@ Testing is an essential part of the project functionality; this section will sho
 ### 📊 Code Coverage (JaCoCo)
 
 ---
-![JaCoCo](./docs/jacoco.png)
+
+![JaCoCo](./docs/jacocoFinal.png)
 
 
 ### 🔍 Static Analysis (SonarQube)

@@ -6,14 +6,18 @@ import java.util.List;
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.domain.model.enums.TravelType;
 import edu.dosw.rideci.infrastructure.controller.dto.Request.LocationRequest;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TravelResponse {
 
-    private Long id;
+    private String id;
 
     private Long organizerId;
 

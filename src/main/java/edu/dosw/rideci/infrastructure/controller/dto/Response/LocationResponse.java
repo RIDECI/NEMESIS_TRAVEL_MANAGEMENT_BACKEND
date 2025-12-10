@@ -1,10 +1,14 @@
 package edu.dosw.rideci.infrastructure.controller.dto.Response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class LocationResponse {
 
     private double latitude;

@@ -23,6 +23,16 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue travelUpdatedQueue() {
+        return new Queue("travel.updated.queue", true);
+    }
+
+    @Bean
+    public Queue travelCancelledEvent() {
+        return new Queue("travel.cancelled.queue", true);
+    }
+
+    @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
@@ -33,6 +43,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Binding bindingTravelCancelled() {
+        return BindingBuilder.bind(travelCancelledEvent()).to(travelExchange()).with("travel.cancelled");
+    }
+
+    @Bean
     public Binding bindingTravelCreated() {
         return BindingBuilder.bind(travelCreatedQueue()).to(travelExchange()).with("travel.created");
     }
@@ -40,6 +55,11 @@ public class RabbitConfig {
     @Bean
     public Binding bindingTravelCompleted() {
         return BindingBuilder.bind(travelCompletedQueue()).to(travelExchange()).with("travel.completed");
+    }
+
+    @Bean
+    public Binding bindingTravelUpdated() {
+        return BindingBuilder.bind(travelUpdatedQueue()).to(travelExchange()).with("travel.updated");
     }
 
     // Microservicio de Perfiles -> Consumer
