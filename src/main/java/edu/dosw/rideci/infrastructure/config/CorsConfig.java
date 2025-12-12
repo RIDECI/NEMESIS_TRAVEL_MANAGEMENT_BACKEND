@@ -13,7 +13,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
+                        .allowedOrigins("http://localhost:5173, https://rideci-frontend-git-feature-n-891f28-danpame1219-9925s-projects.vercel.app?_vercel_share=MnMOocNzguJALpf0sMGAWfDVWgO0YymD")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*");
             }
