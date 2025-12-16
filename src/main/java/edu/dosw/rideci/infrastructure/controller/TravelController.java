@@ -119,7 +119,6 @@ public class TravelController {
             @PathVariable String id, @RequestBody List<Long> passengersList) {
 
         return ResponseEntity.ok(getPassengerListUseCase.getPassengerList(id, passengersList));
-
     }
 
     @GetMapping("/driver/{driverId}")
