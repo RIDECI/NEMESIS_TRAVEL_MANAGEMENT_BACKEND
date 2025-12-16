@@ -93,6 +93,8 @@ class TravelControllerTest {
 
         @MockitoBean
         private UpdateTravelPassengersUseCase updateTravelPassengersUseCase;
+
+        @MockitoBean
         private UpdateAvailableSlotsUseCase updateAvailableSlotsUseCase;
 
         private TravelRequest travelRequest;
