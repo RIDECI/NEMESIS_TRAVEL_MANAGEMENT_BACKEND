@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import edu.dosw.rideci.application.mapper.TravelMapperInitial;
 import edu.dosw.rideci.application.port.in.ChangeStateTravelUseCase;
 import edu.dosw.rideci.application.port.in.CreateTravelUseCase;
+import edu.dosw.rideci.application.port.in.UpdateAvailableSlotsUseCase;
 import edu.dosw.rideci.application.port.in.DeleteTravelUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelByDriverIdUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelUseCase;
@@ -26,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class TravelService implements CreateTravelUseCase, GetTravelUseCase, DeleteTravelUseCase, ModifyTravelUseCase,
         GetAllTravelUseCase, ChangeStateTravelUseCase, GetPassengerListUseCase, GetAllTravelByDriverIdUseCase,
         GetAllTravelsByOrganizerUseCase,
-        GetAllTravelsByPassengerIdUseCase {
+        GetAllTravelsByPassengerIdUseCase, UpdateAvailableSlotsUseCase {
 
     private final TravelRepositoryPort travelRepositoryPort;
     private final TravelMapperInitial travelMapper;
@@ -94,6 +95,11 @@ public class TravelService implements CreateTravelUseCase, GetTravelUseCase, Del
     @Override
     public List<Travel> getAllTravelsByOrganizerId(Long organizerId) {
         return travelRepositoryPort.getAllTravelsByOrganizerId(organizerId);
+    }
+
+    @Override
+    public void updateAvailableSlots(String id, Integer quantity) {
+        travelRepositoryPort.updateAvailableSlots(id, quantity);
     }
 
 }
