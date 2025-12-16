@@ -23,8 +23,10 @@ import edu.dosw.rideci.application.port.in.GetAllTravelUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelsByOrganizerUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelsByPassengerIdUseCase;
 import edu.dosw.rideci.application.port.in.GetPassengerListUseCase;
+import edu.dosw.rideci.application.port.in.UpdateAvailableSlotsUseCase;
 import edu.dosw.rideci.application.port.in.GetTravelUseCase;
 import edu.dosw.rideci.application.port.in.ModifyTravelUseCase;
+
 import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.domain.model.enums.Status;
 import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
@@ -49,6 +51,7 @@ public class TravelController {
     private final GetAllTravelByDriverIdUseCase getAllTravelByDriverIdUseCase;
     private final GetAllTravelsByOrganizerUseCase getAllTravelsByOrganizerUseCase;
     private final GetAllTravelsByPassengerIdUseCase getAllTravelsByPassengerIdUseCase;
+    private final UpdateAvailableSlotsUseCase updateAvailableSlotsUseCase;
     private final TravelMapperInitial travelMapper;
 
     @PostMapping("")
@@ -103,12 +106,19 @@ public class TravelController {
         return ResponseEntity.ok(travelUpdated);
     }
 
+    @PatchMapping("/{id}/slots")
+    public ResponseEntity<Void> updateAvailableSlots(
+            @Parameter(description = "ID del viaje", required = true) @PathVariable String id,
+            @RequestBody Integer quantity) {
+        updateAvailableSlotsUseCase.updateAvailableSlots(id, quantity);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/occupantList/{id}")
     public ResponseEntity<List<Long>> getOccupantList(
             @PathVariable String id, @RequestBody List<Long> passengersList) {
 
         return ResponseEntity.ok(getPassengerListUseCase.getPassengerList(id, passengersList));
-
     }
 
     @GetMapping("/driver/{driverId}")

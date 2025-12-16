@@ -14,7 +14,6 @@ import edu.dosw.rideci.application.port.out.EventPublisher;
 import edu.dosw.rideci.application.port.out.TravelRepositoryPort;
 import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.domain.model.enums.Status;
-import edu.dosw.rideci.domain.model.enums.TravelType;
 import edu.dosw.rideci.exceptions.TravelNotFoundException;
 import edu.dosw.rideci.infrastructure.persistance.Entity.TravelDocument;
 import edu.dosw.rideci.infrastructure.persistance.Repository.mapper.TravelMapper;
@@ -198,6 +197,16 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
 
         return travelMapper.toListDomain(allTravels);
 
+    }
+
+    @Override
+    public void updateAvailableSlots(String id, Integer quantity) {
+        TravelDocument travel = travelRepository.findById(id)
+                .orElseThrow(() -> new TravelNotFoundException(
+                        "The trip to change the state with id: {id} does not exist "));
+
+        travel.setAvailableSlots(travel.getAvailableSlots() + quantity);
+        travelRepository.save(travel);
     }
 
 }
