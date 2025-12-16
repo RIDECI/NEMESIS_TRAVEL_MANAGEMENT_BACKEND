@@ -231,6 +231,16 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
                 .build();
 
         eventPublisher.publish(event, "travel.passengers.updated");
+
+    }
+
+    public void updateAvailableSlots(String id, Integer quantity) {
+        TravelDocument travel = travelRepository.findById(id)
+                .orElseThrow(() -> new TravelNotFoundException(
+                        "The trip to change the state with id: {id} does not exist "));
+
+        travel.setAvailableSlots(travel.getAvailableSlots() + quantity);
+        travelRepository.save(travel);
     }
 
 }

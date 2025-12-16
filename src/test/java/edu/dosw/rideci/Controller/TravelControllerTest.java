@@ -39,6 +39,7 @@ import edu.dosw.rideci.application.port.in.GetPassengerListUseCase;
 import edu.dosw.rideci.application.port.in.GetTravelUseCase;
 import edu.dosw.rideci.application.port.in.ModifyTravelUseCase;
 import edu.dosw.rideci.application.port.in.GetAllTravelsByOrganizerUseCase;
+import edu.dosw.rideci.application.port.in.UpdateAvailableSlotsUseCase;
 
 import edu.dosw.rideci.domain.model.Travel;
 import edu.dosw.rideci.domain.model.enums.Status;
@@ -92,6 +93,7 @@ class TravelControllerTest {
 
         @MockitoBean
         private UpdateTravelPassengersUseCase updateTravelPassengersUseCase;
+        private UpdateAvailableSlotsUseCase updateAvailableSlotsUseCase;
 
         private TravelRequest travelRequest;
         private TravelResponse travelResponse;
@@ -410,5 +412,21 @@ class TravelControllerTest {
                                 .andExpect(jsonPath("$[0].passengersId[1]").value(3));
 
                 verify(getAllTravelsByPassengerIdUseCase, times(1)).getAllTravelsByPassengerId(2L);
+        }
+
+        @DisplayName("Should update available slots")
+        @Test
+        void shouldUpdateAvailableSlotsSuccessfully() throws Exception {
+                String travelId = "550e8400-e29b-41d4-a716-446655440000";
+                Integer quantity = -1;
+
+                doNothing().when(updateAvailableSlotsUseCase).updateAvailableSlots(travelId, quantity);
+
+                mockMvc.perform(patch("/travels/{id}/slots", travelId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(quantity)))
+                                .andExpect(status().isOk());
+
+                verify(updateAvailableSlotsUseCase, times(1)).updateAvailableSlots(travelId, quantity);
         }
 }
