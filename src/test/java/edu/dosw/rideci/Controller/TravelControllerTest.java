@@ -47,6 +47,7 @@ import edu.dosw.rideci.domain.model.enums.TravelType;
 import edu.dosw.rideci.infrastructure.controller.TravelController;
 import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
 import edu.dosw.rideci.infrastructure.controller.dto.Response.TravelResponse;
+import edu.dosw.rideci.application.usecases.UpdateTravelPassengersUseCase;
 
 @WebMvcTest(TravelController.class)
 class TravelControllerTest {
@@ -91,6 +92,7 @@ class TravelControllerTest {
         private TravelMapperInitial travelMapper;
 
         @MockitoBean
+        private UpdateTravelPassengersUseCase updateTravelPassengersUseCase;
         private UpdateAvailableSlotsUseCase updateAvailableSlotsUseCase;
 
         private TravelRequest travelRequest;

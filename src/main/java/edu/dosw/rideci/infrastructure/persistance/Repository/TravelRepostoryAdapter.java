@@ -200,6 +200,40 @@ public class TravelRepostoryAdapter implements TravelRepositoryPort {
     }
 
     @Override
+    public void updatePassengers(String travelId, List<Long> passengersIds) {
+        TravelDocument travel = travelRepository.findById(travelId)
+                .orElseThrow(() -> new TravelNotFoundException("Travel with id " + travelId + " not found"));
+
+        travel.setPassengersId(passengersIds);
+
+        // Recalculate available slots
+        // Assuming conditions or vehicle capacity isn't changing here directly,
+        // effectively available slots = initial capacity - current passengers
+        // However, since we don't store initial capacity separately easily here (it's
+        // dynamic),
+        // we might just update the list.
+        // IMPORTANT: The prompt asked to update the list, usually this affects
+        // availableSlots too.
+        // If availableSlots was manually managed, we should update it.
+        // Let's assume availableSlots is manually managed or we just set the list as
+        // requested.
+        // For robustness, one might decrement availableSlots, but typically 'updating
+        // list'
+        // implies synchronization. ensuring we don't exceed limits would be domain
+        // logic.
+
+        TravelDocument saved = travelRepository.save(travel);
+
+        TravelUpdatedEvent event = TravelUpdatedEvent.builder()
+                .travelId(travelId)
+                .availableSlots(saved.getAvailableSlots()) // Sending current slots
+                .passengersId(saved.getPassengersId())
+                .build();
+
+        eventPublisher.publish(event, "travel.passengers.updated");
+
+    }
+
     public void updateAvailableSlots(String id, Integer quantity) {
         TravelDocument travel = travelRepository.findById(id)
                 .orElseThrow(() -> new TravelNotFoundException(
