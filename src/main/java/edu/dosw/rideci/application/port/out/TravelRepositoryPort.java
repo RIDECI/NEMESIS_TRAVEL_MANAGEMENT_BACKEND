@@ -27,4 +27,6 @@ public interface TravelRepositoryPort {
 
     List<Travel> getAllTravelsByOrganizerId(Long organizerId);
 
+    void updateAvailableSlots(String id, Integer quantity);
+
 }
