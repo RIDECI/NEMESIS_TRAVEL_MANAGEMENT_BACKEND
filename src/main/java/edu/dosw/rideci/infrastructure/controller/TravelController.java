@@ -49,6 +49,7 @@ public class TravelController {
     private final GetAllTravelByDriverIdUseCase getAllTravelByDriverIdUseCase;
     private final GetAllTravelsByOrganizerUseCase getAllTravelsByOrganizerUseCase;
     private final GetAllTravelsByPassengerIdUseCase getAllTravelsByPassengerIdUseCase;
+    private final edu.dosw.rideci.application.usecases.UpdateTravelPassengersUseCase updateTravelPassengersUseCase;
     private final TravelMapperInitial travelMapper;
 
     @PostMapping("")
@@ -134,6 +135,14 @@ public class TravelController {
                 .getAllTravelsByPassengerId(passengerId);
 
         return ResponseEntity.ok(travelMapper.toListResponse(allTravelsByPassengerId));
+    }
+
+    @PatchMapping("/{id}/passengers")
+    public ResponseEntity<Void> updatePassengers(
+            @PathVariable String id,
+            @RequestBody List<Long> passengersIds) {
+        updateTravelPassengersUseCase.execute(id, passengersIds);
+        return ResponseEntity.ok().build();
     }
 
 }

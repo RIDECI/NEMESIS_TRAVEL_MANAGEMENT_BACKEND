@@ -1,6 +1,7 @@
 package edu.dosw.rideci.application.events;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import edu.dosw.rideci.domain.model.Location;
 import lombok.AllArgsConstructor;
@@ -27,5 +28,7 @@ public class TravelUpdatedEvent {
     private Location origin;
 
     private Location destiny;
+
+    private List<Long> passengersId;
 
 }

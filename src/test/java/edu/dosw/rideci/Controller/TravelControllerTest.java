@@ -46,6 +46,7 @@ import edu.dosw.rideci.domain.model.enums.TravelType;
 import edu.dosw.rideci.infrastructure.controller.TravelController;
 import edu.dosw.rideci.infrastructure.controller.dto.Request.TravelRequest;
 import edu.dosw.rideci.infrastructure.controller.dto.Response.TravelResponse;
+import edu.dosw.rideci.application.usecases.UpdateTravelPassengersUseCase;
 
 @WebMvcTest(TravelController.class)
 class TravelControllerTest {
@@ -88,6 +89,9 @@ class TravelControllerTest {
 
         @MockitoBean
         private TravelMapperInitial travelMapper;
+
+        @MockitoBean
+        private UpdateTravelPassengersUseCase updateTravelPassengersUseCase;
 
         private TravelRequest travelRequest;
         private TravelResponse travelResponse;
@@ -301,7 +305,7 @@ class TravelControllerTest {
         @Test
         void shouldGetOccupantListSuccessfully() throws Exception {
                 List<Long> passengerList = List.of(2L, 3L);
-                
+
                 when(getPassengerListUseCase.getPassengerList("550e8400-e29b-41d4-a716-446655440000", passengerList))
                                 .thenReturn(passengerList);
 
